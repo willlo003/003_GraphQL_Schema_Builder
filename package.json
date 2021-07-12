@@ -1,0 +1,29 @@
+{
+  "name": "003_graphql_schema_builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "webpack serve",
+    "start": "NODE_ENV=production nodemon src/server/server.ts",
+    "build": "NODE_ENV=production webpack",
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack serve --open \" \"NODE_ENV=production nodemon src/server/server.ts\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.3.1",
+    "concurrently": "^6.2.0",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.12",
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.5",
+    "webpack": "^5.44.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

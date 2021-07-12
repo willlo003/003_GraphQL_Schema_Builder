@@ -1,0 +1,7 @@
+node_modules/
+public/*.js
+npm-debug.log*
+.env
+.env.example
+.env.local
+.env.staging
