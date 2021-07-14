@@ -1,11 +1,10 @@
 const path = require("path");
 // const { isExpressionStatement } = require("typescript");
-// const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: "./src/client/index.tsx",
   output: {
-    publicPath: "/",
+    publicPath: "/public/",
     filename: "bundle.js",
     path: path.join(__dirname, "public"),
   },
@@ -18,11 +17,15 @@ module.exports = {
         target: "http://localhost:3000",
         // changeOrigin: true,
       },
-      "/api/**": {
+      "/api": {
         target: "http://localhost:3000/",
         secure: false,
         pathRewrite: { "^/api": "" },
       },
+      // "/**": {
+      //   target: "http://localhost:3000/",
+      //   secure: false,
+      // },
     },
   },
   module: {
@@ -52,6 +55,4 @@ module.exports = {
     extensions: [".tsx", ".ts", ".js", ".jsx"],
   },
   devtool: "source-map",
-
-  // plugins: [new HTMLWebpackPlugin({})],
 };

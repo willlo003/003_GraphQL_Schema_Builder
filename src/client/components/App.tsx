@@ -1,13 +1,10 @@
 import * as React from "react";
-import Input from "./Input"
+import Api from "./Api"
 
 const App: React.FC = () => {
-    console.log("hi")
     return (
         <div>
-            Help
-            omg
-            {/* <Route component={Input} /> */}
+            <Api />
         </div>
     )
 }
