@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const Input: React.FC = () => {
 
     const [link, setLink] = useState()
-    const [data, setData] = useState([])
+    const [click, setClick] = useState(false)
 
     function fetching() {
         console.log("start fetching")
@@ -25,27 +25,29 @@ const Input: React.FC = () => {
                 board[0].innerHTML = '';
                 for (var i = 0; i < keys.length; i++) {
                     let pair = document.createElement('div')
-                    pair.className = `pair${i}`
+                    pair.className = "pair"
                     let key = document.createElement("button");
                     key.textContent = keys[i]
+                    key.className = "key"
                     let value = document.createElement("p");
-                    value.textContent = values[i].toString()
+                    value.textContent = values[i].toString().replaceAll(',', '\r\n')
+                    value.className = "value"
 
                     key.onclick = () => {
-                        if (value.style.display === "none") {
-                            value.style.display = "block"
-                        } else {
-
-                            value.style.display = "none"
-
-                        }
+                        // if(click===false ) {
+                            if (value.style.visibility === "visible") {
+                                value.style.visibility = "hidden"
+                                key.style.backgroundColor = "#1f383b"
+                            } else {
+                                value.style.visibility = "visible"
+                                key.style.backgroundColor = "orange"
+                            }
+                        // }
                     }
 
                     board[0].appendChild(pair);
                     pair.append(key)
                     pair.append(value)
-                    value.style.display = "none"
-
                 }
             })
             .catch((err) => console.log("error"));
@@ -55,13 +57,16 @@ const Input: React.FC = () => {
         setLink(e.target.value)
     }
     return (
-        <div className="api-fetching">
-            <label>GraphQL Root Fetching</label>
+        <div>
+            {/* <div className="wrap"> */}
+            <div className="fetching">
             <br></br>
-            <input placeholder="please plaste the link for fetching" onChange={changing}></input>
-            <br></br>
-            <button onClick={fetching} > Send</button>
-            <div className="data-list"></div>
+            <input placeholder="please plaste the link for fetching" className="api-fetching" onChange={changing}></input>
+            <button onClick={fetching} className="fetchButton"> Send</button>
+        </div>
+            {/* </div> */}
+    
+        <div className="data-list"></div>
         </div>
     )
 }

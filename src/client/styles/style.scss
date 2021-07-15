@@ -1,3 +1,118 @@
+body {
+  background: #f2f2f2;
+  font-family: "Open Sans", sans-serif;
+}
+h1 {
+  text-align: center;
+}
+
 label {
-    color: red;
+  color: red;
+}
+
+.fetching {
+  margin: 0 auto;
+  width: 50%;
+  position: relative;
+  display: flex;
+  left: auto;
+}
+
+.api-fetching {
+  width: 100%;
+  border: 3px solid #00b4cc;
+  border-right: none;
+  padding: 5px;
+  height: 20px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9dbfaf;
+}
+
+.api-fetching:focus {
+  color: #00b4cc;
+}
+
+.fetchButton {
+  height: 36px;
+  border: 1px solid #00b4cc;
+  background: #00b4cc;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+  -webkit-transition: font-size 0.5s ease;
+  -moz-transition: font-size 0.5s ease;
+  -o-transition: font-size 0.5s ease;
+  transition: font-size 0.5s ease;
+}
+
+.fetchButton:hover {
+  background-color: orange;
+  font-size: 1.5em;
+}
+
+.fetchButton:active {
+  background-color: orange;
+  font-size: 1.2em;
+}
+
+.pair {
+  text-align: center;
+}
+.key {
+  margin: 5px;
+  height: 36px;
+  width: 90%;
+  border: 2px solid #ffffff;
+  background: #1f383b;
+  left: 5%;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 10x;
+}
+
+.data-list {
+  margin: 10px;
+  background: #00b4cca9;
+  border-radius: 10px;
+  width: 12%;
+}
+
+.value {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 10px;
+  white-space: pre;
+  /* Position the tooltip */
+  position: absolute;
+  left: 12%;
+  margin-top: -25px;
+  z-index: 1;
+  opacity: 0.7;
+}
+
+.value::after {
+  content: "";
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.key:hover {
+  background-color: gray;
+  transform: translateY(3px);
+}
+
+.key:active {
+  background-color: orange;
+  transform: translateY(6px);
 }
