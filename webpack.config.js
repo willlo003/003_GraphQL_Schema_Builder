@@ -1,5 +1,5 @@
 const path = require("path");
-// const { isExpressionStatement } = require("typescript");
+
 
 module.exports = {
   entry: "./src/client/index.tsx",
@@ -48,7 +48,12 @@ module.exports = {
         test: /\.js$/,
         loader: "source-map-loader",
       },
+      {
+        test: /\.s?css$/,
+        use: ["style-loader", "css-loader"],
+      },
     ],
+
   },
 
   resolve: {

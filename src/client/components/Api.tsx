@@ -6,7 +6,6 @@ const Input: React.FC = () => {
     const [link, setLink] = useState()
     const [data, setData] = useState([])
 
-
     function fetching() {
         console.log("start fetching")
         const body = { link }
@@ -22,12 +21,30 @@ const Input: React.FC = () => {
             .then((data) => {
                 let keys = Object.keys(data)
                 let values = Object.values(data)
+                let board = document.getElementsByClassName("data-list")
+                board[0].innerHTML = '';
                 for (var i = 0; i < keys.length; i++) {
-                    let board = document.getElementsByClassName("data-list")
+                    let pair = document.createElement('div')
+                    pair.className = `pair${i}`
                     let key = document.createElement("button");
                     key.textContent = keys[i]
-                    key.title = values[i].toString()
-                    board[0].appendChild(key);
+                    let value = document.createElement("p");
+                    value.textContent = values[i].toString()
+
+                    key.onclick = () => {
+                        if (value.style.display === "none") {
+                            value.style.display = "block"
+                        } else {
+
+                            value.style.display = "none"
+
+                        }
+                    }
+
+                    board[0].appendChild(pair);
+                    pair.append(key)
+                    pair.append(value)
+                    value.style.display = "none"
 
                 }
             })
