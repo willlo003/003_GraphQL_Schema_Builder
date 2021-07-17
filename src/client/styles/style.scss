@@ -61,6 +61,7 @@ label {
 .pair {
   text-align: center;
 }
+
 .key {
   margin: 5px;
   height: 36px;
@@ -73,11 +74,30 @@ label {
   font-size: 10x;
 }
 
+.content {
+  display: flex;
+}
+
 .data-list {
   margin: 10px;
   background: #00b4cca9;
   border-radius: 10px;
   width: 12%;
+}
+
+.code {
+  margin: 10px;
+  background: #00b4cca9;
+  border-radius: 10px;
+  width: 50%;
+  white-space: pre;
+}
+
+.board {
+  margin: 10px;
+  background: #00b4cca9;
+  border-radius: 10px;
+  width: 50%;
 }
 
 .value {
@@ -113,6 +133,32 @@ label {
 }
 
 .key:active {
+  background-color: orange;
+  transform: translateY(6px);
+}
+
+.board {
+  display: flex;
+}
+
+.entry-point {
+  height: 30px;
+  border: 2px solid #ffffff;
+  text-align: center;
+  background: #00b4cca9;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 10px;
+}
+
+.entry-point:hover {
+  background-color: gray;
+  transform: translateY(3px);
+}
+
+.entry-point:active {
   background-color: orange;
   transform: translateY(6px);
 }
