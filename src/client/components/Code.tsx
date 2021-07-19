@@ -1,32 +1,50 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 type ChildProps = {
-    // onClick?:(val: string) => void,
-    entryPoint?:(val: undefined) => void,
+    data: object,
+    entryPoint: string,
+    schema: string[],
   };
 
 const Code: React.FC<ChildProps> = ({
-    entryPoint
-}) => {
+    data,
+    entryPoint,
+    schema,
 
-    let code: string = '';
-    let schema: string = '';
-    let padding: object = {
-        padding: "0px"
+}) => {
+  
+  useEffect(() => {
+    if(data !== undefined){
+        let height = `${document.querySelector(".board").clientHeight}px`
+        document.querySelector("textarea").style.height = height
     }
-    
-    if(entryPoint !== undefined){
-        code = `${entryPoint} { ${schema}\n}`
-        padding = {
-            padding: "10px"
-        }
+  }, [data])
+
+  useEffect(() => {
+    schema.forEach((e) => {
+      if(e === "Query"){
+        schemaMethod += '\n\tquery: RootQueryType,'
+      } else {
+        schemaMethod += '\n\tquery: RootMutationType,'
+      }
+    })
+    schemaCode = `\n\nconst schema = new GraphQLSchema({ ${schemaMethod}\n})`;
+    code = head + schemaCode;
+    if(data !== undefined) {
+      document.getElementById('textarea').textContent = code
     }
-    
-    return (
-        <div className="code">
-           {code !== '' && <div style={padding}>{code}</div>}
-        </div>
-    )
+  }, [schema])
+
+  let schemaMethod: string = '';
+  let head: string = `const express = require("express-graphql").graphqlHTTP;\nconst {\n\tGraphQLSchema,\n\tGraphQLObjectType,\n\tGraphQLString,\n\tGraphQLList,\n\tGraphQLNonNull,\n\tGraphQLInt,\n} = require("graphql");`;
+  let schemaCode: string = `\n\nconst schema = new GraphQLSchema({\n ${schemaMethod}\n})`;
+  let code: string
+
+  return (
+      <div className="code">
+          {data !== undefined && <textarea id='textarea'></textarea>}
+      </div>
+  )
 }
 
 export default Code;

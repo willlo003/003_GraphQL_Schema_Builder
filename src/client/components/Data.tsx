@@ -2,7 +2,7 @@ import React from "react";
 
 type ChildProps = {
     // onClick?:(val: string) => void,
-    data?:(val: object) => void
+    data: object
   };
 
 const Data: React.FC<ChildProps> = ({
@@ -20,7 +20,6 @@ const Data: React.FC<ChildProps> = ({
             key.textContent = keys[i]
             key.className = "key"
             let value = document.createElement("p");
-            console.log(typeof values[i])
             value.textContent = values[i].toString().replaceAll(',', '\r\n')
             value.className = "value"
             

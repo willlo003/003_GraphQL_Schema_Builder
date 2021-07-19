@@ -82,22 +82,14 @@ label {
   margin: 10px;
   background: #00b4cca9;
   border-radius: 10px;
-  width: 12%;
-}
-
-.code {
-  margin: 10px;
-  background: #00b4cca9;
-  border-radius: 10px;
-  width: 50%;
-  white-space: pre;
+  width: 200px;
 }
 
 .board {
   margin: 10px;
   background: #00b4cca9;
   border-radius: 10px;
-  width: 50%;
+  width: 450px;
 }
 
 .value {
@@ -161,4 +153,12 @@ label {
 .entry-point:active {
   background-color: orange;
   transform: translateY(6px);
+}
+
+textarea {
+  border-radius: 10px;
+  width: 700px;
+  margin: 10px;
+  background: #00b4cca9;
+  resize: vertical;
 }

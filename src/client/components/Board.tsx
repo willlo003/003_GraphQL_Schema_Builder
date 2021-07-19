@@ -1,30 +1,35 @@
-import React, {useState} from "react";
+import React, { useEffect } from "react";
 
 type ChildProps = {
     // onClick?:(val: string) => void,
-    data?:(val: object) => void,
-    setEntryPoint?:(val: undefined) => void,
-    style?:(val: object) => object,
-    setStyle?:(val: object) => void
+    data: object,
+    setEntryPoint: any, 
+    schema: string[],
+    setSchema: any
   };
 
 const Board: React.FC<ChildProps> = ({
     data,
     setEntryPoint,
+    schema,
+    setSchema
 }) => {
 
+  
+    let temp, ind;
+
     function entry(e){
-        setEntryPoint(e.target.textContent)
-        for (let i:number = 0; i < 2; i++){
-            if (`${i}` === e.target.id){
-                document.getElementById(`${i}`).style.backgroundColor = "orange"
-            } else {
-                document.getElementById(`${i}`).style.backgroundColor = "#00b4cca9"
-            }
+        temp = schema.slice()
+        // console.log(temp.includes(e.target.textContent))
+        if(!temp.includes(e.target.textContent)){
+            temp.push(e.target.textContent)
+        } else {
+            ind = temp.indexOf(e.target.textContent)
+            temp = temp.slice(0, ind).concat(temp.slice(ind + 1))
         }
+        setSchema(temp)
     }
 
-    
     return (
         <div className="board">
             {data !== undefined && <button className="entry-point" id="0" onClick={entry}>Query</button>}

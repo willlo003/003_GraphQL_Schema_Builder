@@ -1,9 +1,9 @@
 import React from "react";
 
 type ChildProps = {
-    setLink?:(val: undefined) => void,
-    link?:(val: string) => void,
-    setData?:(val: undefined) => void
+    setLink: any,
+    link: string,
+    setData: any
   };
 
 const Input: React.FC<ChildProps> = ({
@@ -11,8 +11,6 @@ const Input: React.FC<ChildProps> = ({
     link,
     setData
   })  => {
-
-    // const [link, setLink] = useState()
 
     function fetching() {
         const body = { link }
@@ -27,34 +25,6 @@ const Input: React.FC<ChildProps> = ({
             .then((res) => res.json())
             .then((data) => {
                 setData(data)
-                // let keys = Object.keys(data)
-                // let values = Object.values(data)
-                // let board = document.getElementsByClassName("data-list")
-                // board[0].innerHTML = '';
-                // for (var i = 0; i < keys.length; i++) {
-                //     let pair = document.createElement('div')
-                //     pair.className = "pair"
-                //     let key = document.createElement("button");
-                //     key.textContent = keys[i]
-                //     key.className = "key"
-                //     let value = document.createElement("p");
-                //     value.textContent = values[i].toString().replaceAll(',', '\r\n')
-                //     value.className = "value"
-
-                //     key.onclick = () => {
-                //             if (value.style.visibility === "visible") {
-                //                 value.style.visibility = "hidden"
-                //                 key.style.backgroundColor = "#1f383b"
-                //             } else {
-                //                 value.style.visibility = "visible"
-                //                 key.style.backgroundColor = "orange"
-                //             }
-                //     }
-
-                //     board[0].appendChild(pair);
-                //     pair.append(key)
-                //     pair.append(value)
-                // }
             })
             .catch((err) => console.log("error"));
     }
@@ -63,9 +33,6 @@ const Input: React.FC<ChildProps> = ({
         setLink(e.target.value);
     }
 
-    // const changing = () => {
-    //     onClick('Clicked!');
-    //   }
     return (
         <div>
             <div className="fetching">
