@@ -9,7 +9,6 @@ const App: React.FC = () => {
 
     const [link, setLink] = React.useState<string>('');
     const [data, setData] = React.useState<object>();
-    const [entryPoint, setEntryPoint] = React.useState('');
     const [schema, setSchema] = React.useState<string[]>([])
 
     return (
@@ -17,8 +16,8 @@ const App: React.FC = () => {
             <Api link={link} setLink={setLink} setData={setData}/>
             <div className="content">
                <Data data={data} />
-               <Board data={data} setEntryPoint={setEntryPoint} schema={schema} setSchema={setSchema}/>
-               <Code data={data} entryPoint={entryPoint} schema={schema}/>
+               <Board data={data} schema={schema} setSchema={setSchema}/>
+               <Code data={data} schema={schema}/>
             </div>
         </div>
     )

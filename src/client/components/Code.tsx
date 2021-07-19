@@ -2,13 +2,11 @@ import React, { useEffect } from "react";
 
 type ChildProps = {
     data: object,
-    entryPoint: string,
     schema: string[],
   };
 
 const Code: React.FC<ChildProps> = ({
     data,
-    entryPoint,
     schema,
 
 }) => {

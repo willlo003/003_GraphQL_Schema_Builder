@@ -85,11 +85,16 @@ label {
   width: 200px;
 }
 
-.board {
+.drop-board {
   margin: 10px;
   background: #00b4cca9;
   border-radius: 10px;
-  width: 450px;
+  width: 800px;
+  background: #436e747c;
+}
+
+.drop-board > button {
+  width: 120px;
 }
 
 .value {
@@ -129,11 +134,11 @@ label {
   transform: translateY(6px);
 }
 
-.board {
+.schema-board {
   display: flex;
 }
 
-.entry-point {
+.schema {
   height: 30px;
   border: 2px solid #ffffff;
   text-align: center;
@@ -145,19 +150,19 @@ label {
   margin: 10px;
 }
 
-.entry-point:hover {
+.schema:hover {
   background-color: gray;
   transform: translateY(3px);
 }
 
-.entry-point:active {
+.schema:active {
   background-color: orange;
   transform: translateY(6px);
 }
 
 textarea {
   border-radius: 10px;
-  width: 700px;
+  width: 500px;
   margin: 10px;
   background: #00b4cca9;
   resize: vertical;
