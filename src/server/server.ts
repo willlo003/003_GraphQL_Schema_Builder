@@ -1,18 +1,21 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
 import * as dataController from './controllers/dataController';
+import * as testController from './controllers/testController';
+
 
 
 const app: Application = express();
 const cors = require("cors");
-// const expressGraphQL = require("express-graphql").graphqlHTTP;
-// const {
-//   GraphQLSchema,
-//   GraphQLObjectType,
-//   GraphQLList,
-//   GraphQLNonNull,
-//   GraphQLInt
-// } = require("graphql");
+const expressGraphQL = require("express-graphql").graphqlHTTP;
+const {
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLInt,
+  GraphQLString
+} = require("graphql");
 
 
 app.use(express.json());
@@ -22,6 +25,12 @@ app.use(
     credentials: true,
   })
 );
+
+// const authors = [
+//   { id: 1, name: "J. K. Rowling" },
+//   { id: 2, name: "J. R. R. Tolkien" },
+//   { id: 3, name: "Brent Weeks" },
+// ];
 
 // const books = [
 //   { id: 1, name: "Harry Potter and the Chamber of Secrets", authorId: 1 },
@@ -33,6 +42,7 @@ app.use(
 //   { id: 7, name: "The Way of Shadows", authorId: 3 },
 //   { id: 8, name: "Beyond the Shadows", authorId: 3 },
 // ];
+
 // const dataType = new GraphQLObjectType({
 //   name: "Data",
 //   description: "This represents a book written by an author",
@@ -55,8 +65,13 @@ app.use(
 //   }),
 // });
 
-// const schema = new GraphQLSchema({
-//   query: RootQueryType,
+// let schema = new GraphQLSchema({
+//   query: new GraphQLObjectType({
+//     name: "HelloWorld",
+//     fields: () => ({
+//       message: { type: GraphQLString, resolve: () => "Hello FK" },
+//     }),
+//   }),
 // });
 
 if (process.env.NODE_ENV === "production") {
@@ -70,15 +85,15 @@ if (process.env.NODE_ENV === "production") {
     return res.status(200).json(res.locals.data)
   })
 
-
-
-  //   app.use(
-  //     "/graphql",
-  //     expressGraphQL({
-  //       schema: schema,
-  //       graphiql: true,
-  //     })
-  //   );
+  app.post('/test', testController.getSchema, (req: Request, res: Response) => {
+    let newSchema = eval(res.locals.code)
+    console.log(newSchema)
+    app.use("/graphql", expressGraphQL({
+      schema: newSchema,
+      graphiql: true,
+    }))
+    return res.status(200).json("ok")
+  })
 }
 
 app.listen(3000, () => {

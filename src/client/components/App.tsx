@@ -3,7 +3,8 @@ import Api from "./Api"
 import Data from "./Data";
 import Code from "./Code";
 import Board from "./Board";
-import { useEffect } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+const createHistory = require("history").createBrowserHistory
 
 const App: React.FC = () => {
 
@@ -11,8 +12,15 @@ const App: React.FC = () => {
     const [data, setData] = React.useState<object>();
     // const [schema, setSchema] = React.useState<string[]>([])
 
-    let schema = []
+    const history = createHistory();
+    let schema:string[] = []
     let dragItem;
+    let schemaMethod: string = '';
+    let head: string = `const express = require("express-graphql").graphqlHTTP;\nconst {\n\tGraphQLSchema,\n\tGraphQLObjectType,\n\tGraphQLString,\n\tGraphQLList,\n\tGraphQLNonNull,\n\tGraphQLInt,\n} = require("graphql");`;
+    let schemaCode: string = `\n\nconst schema = new GraphQLSchema({\n ${schemaMethod}\n})`;
+    let code: string
+    let root: string
+    let db: string = `\n\nconst db = \'${link}\';`
 
     function dragStart(){
         dragItem = this
@@ -44,7 +52,7 @@ const App: React.FC = () => {
     function drop(){
         this.append(dragItem)
         this.style.backgroundColor = "#436e747c"
-        console.log(schema, this.className)
+        // console.log(schema, this.className)
         if (this.children.length !== 0){
             if(!schema.includes(this.className)){
                 schema.push(this.className)
@@ -62,14 +70,12 @@ const App: React.FC = () => {
     function drop1(){
         this.append(dragItem)
         this.style.backgroundColor = "#00b4cca9"
-        console.log(document.getElementById('drop-board-0').children.length)
         if (document.getElementById('drop-board-0').children.length === 1) {
             schema = schema.slice(0, schema.indexOf("Query")).concat(schema.slice(schema.indexOf("Query") + 1))
         } 
         if (document.getElementById('drop-board-1').children.length === 1) {
             schema = schema.slice(0, schema.indexOf("Mutation")).concat(schema.slice(schema.indexOf("Mutation") + 1))
         } 
-        console.log(schema)
         updateCode(schema)
     }
 
@@ -85,29 +91,50 @@ const App: React.FC = () => {
             root += "\n\nconst RootMutationType = new GraphQLObjectType({\n});"
           }
         })
-        schemaCode = `\n\nconst schema = new GraphQLSchema({ ${schemaMethod}\n})`;
-        code = head + root + schemaCode;
+        schemaCode = `\n\nconst schema = new GraphQLSchema({ ${schemaMethod}\n});`;
+
+        code = head + db + root + schemaCode;
 
         if(data !== undefined) {
           document.getElementById('textarea').textContent = code
         }
       }
     
-      let schemaMethod: string = '';
-      let head: string = `const express = require("express-graphql").graphqlHTTP;\nconst {\n\tGraphQLSchema,\n\tGraphQLObjectType,\n\tGraphQLString,\n\tGraphQLList,\n\tGraphQLNonNull,\n\tGraphQLInt,\n} = require("graphql");`;
-      let schemaCode: string = `\n\nconst schema = new GraphQLSchema({\n ${schemaMethod}\n})`;
-      let code: string
-      let root: string
+      function sendSchema(e){
+        let newCode = { code: document.getElementById("textarea").value }
+        const body = { newCode }
+        fetch("/test", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(body),  
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data)
+            history.push('/graphql');
+            history.go(0)
+        })
+        .catch((err) => console.log("get schema error"));
+      }
 
     return (
-        <div>
-            <Api link={link} setLink={setLink} setData={setData}/>
-            <div className="content">
-               <Data data={data} dragStart={dragStart} dragEnd={dragEnd} dragOver={dragOver} dragEnter={dragEnter} dragLeave1={dragLeave1} drop1={drop1} />
-               <Board data={data} schema={schema} dragOver={dragOver} dragEnter={dragEnter} dragLeave={dragLeave} drop={drop}/>
-               <Code data={data} schema={schema}/>
-            </div>
-        </div>
+        <Router>
+                  <Route exact path="/">
+                    <div>
+                        <Api link={link} setLink={setLink} setData={setData}/>
+                        <div className="content">
+                            <Data data={data} dragStart={dragStart} dragEnd={dragEnd} dragOver={dragOver} dragEnter={dragEnter} dragLeave1={dragLeave1} drop1={drop1} />
+                            <Board data={data} schema={schema} dragOver={dragOver} dragEnter={dragEnter} dragLeave={dragLeave} drop={drop}/>
+                            <Code data={data} schema={schema} sendSchema={sendSchema}/>
+                         </div>
+                    </div>
+                </Route>
+                <Route exact path="/graphql" >
+                </Route>          
+        </Router>
     )
 }
 

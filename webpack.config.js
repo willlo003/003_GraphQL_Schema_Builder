@@ -1,6 +1,5 @@
 const path = require("path");
 
-
 module.exports = {
   entry: "./src/client/index.tsx",
   output: {
@@ -22,10 +21,10 @@ module.exports = {
         secure: false,
         pathRewrite: { "^/api": "" },
       },
-      // "/**": {
-      //   target: "http://localhost:3000/",
-      //   secure: false,
-      // },
+      "/graphql": {
+        target: "http://localhost:3000/",
+        secure: false,
+      },
     },
   },
   module: {
@@ -53,7 +52,6 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
     ],
-
   },
 
   resolve: {

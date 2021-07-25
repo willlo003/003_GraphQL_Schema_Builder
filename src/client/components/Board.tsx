@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
 
 type ChildProps = {
     // onClick?:(val: string) => void,

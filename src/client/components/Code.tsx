@@ -3,11 +3,13 @@ import React, { useEffect } from "react";
 type ChildProps = {
     data: object,
     schema: string[],
+    sendSchema: any
   };
 
 const Code: React.FC<ChildProps> = ({
     data,
     schema,
+    sendSchema
 }) => {
 
   useEffect(() => {
@@ -17,11 +19,12 @@ const Code: React.FC<ChildProps> = ({
     }
   }, [data])
 
- 
+
 
   return (
       <div className="code">
           {data !== undefined && <textarea id='textarea'></textarea>}
+          {data !== undefined && <button id='test' onClick={sendSchema}>Test</button>}
       </div>
   )
 }
