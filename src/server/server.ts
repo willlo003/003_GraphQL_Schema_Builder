@@ -2,20 +2,23 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
 import * as dataController from './controllers/dataController';
 import * as testController from './controllers/testController';
+const { buildSchema, getIntrospectionQuery, printSchema } = require("graphql")
 
+const expressPlayground = require('graphql-playground-middleware-express')
+    .default
 
 
 const app: Application = express();
 const cors = require("cors");
 const expressGraphQL = require("express-graphql").graphqlHTTP;
-const {
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLString
-} = require("graphql");
+// const {
+//   GraphQLSchema,
+//   GraphQLObjectType,
+//   GraphQLList,
+//   GraphQLNonNull,
+//   GraphQLInt,
+//   GraphQLString
+// } = require("graphql");
 
 
 app.use(express.json());
@@ -26,6 +29,7 @@ app.use(
   })
 );
 
+let data = [] ;
 // const authors = [
 //   { id: 1, name: "J. K. Rowling" },
 //   { id: 2, name: "J. R. R. Tolkien" },
@@ -65,7 +69,8 @@ app.use(
 //   }),
 // });
 
-// let schema = new GraphQLSchema({
+
+// let Schema = new GraphQLSchema({
 //   query: new GraphQLObjectType({
 //     name: "HelloWorld",
 //     fields: () => ({
@@ -82,18 +87,43 @@ if (process.env.NODE_ENV === "production") {
   })
 
   app.post('/fetching', dataController.getData, (req: Request, res: Response) => {
+    data.push(res.locals.data) 
     return res.status(200).json(res.locals.data)
   })
 
   app.post('/test', testController.getSchema, (req: Request, res: Response) => {
-    let newSchema = eval(res.locals.code)
-    console.log(newSchema)
-    app.use("/graphql", expressGraphQL({
-      schema: newSchema,
-      graphiql: true,
-    }))
+    eval(res.locals.code)
+    // console.log(typeof data)
+    // expressGraphQL({
+    //   schema: {},
+    //   graphiql: true,
+    // })
+//     let sdlSchema = printSchema(Schema);
+//     sdlSchema =`
+//    schema {
+//        query: omg
+//      }
+     
+//     type omg {
+//       message: String
+//      }
+
+// `
+// const newBuiltSchema = buildSchema(sdlSchema);
+// console.log(sdlSchema, newBuiltSchema)
+
+  //   app.use("/graphql", expressGraphQL({
+  //     schema: newBuiltSchema,
+  //     graphiql: true,
+  //   }))
+  //   app.get('/test', expressPlayground({ endpoint: '/graphql' }))
+
+
+
     return res.status(200).json("ok")
   })
+
+
 }
 
 app.listen(3000, () => {

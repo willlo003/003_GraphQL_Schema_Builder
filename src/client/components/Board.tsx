@@ -4,6 +4,7 @@ type ChildProps = {
     // onClick?:(val: string) => void,
     data: object,
     schema: string[],
+    dragStart1: any,
     dragOver: any,
     dragEnter: any,
     dragLeave: any,
@@ -14,6 +15,7 @@ type ChildProps = {
 const Board: React.FC<ChildProps> = ({
     data,
     schema,
+    dragStart1,
     dragOver,
     dragEnter,
     dragLeave,
@@ -47,36 +49,24 @@ const Board: React.FC<ChildProps> = ({
             mutationBoard.addEventListener("dragenter", dragEnter)
             mutationBoard.addEventListener("dragleave", dragLeave)
             mutationBoard.addEventListener("drop", drop)
+
+            const tool = document.getElementById("toolBoard")
+            let type = document.createElement('button')
+            type.textContent = "Type"
+            type.draggable = true;
+            type.cloneNode(true);
+            tool.append(type)
+            type.addEventListener("dragstart", dragStart1)
         }
       }, [data])
-  
-    // let temp, ind;
-
-    // function entry(){
-        // console.log(document.getElementById('drop-board-0').children)
-    //     temp = schema.slice()
-    //     if(!temp.includes(e.target.textContent)){
-    //         temp.push(e.target.textContent)
-    //     } else {
-    //         ind = temp.indexOf(e.target.textContent)
-    //         temp = temp.slice(0, ind).concat(temp.slice(ind + 1))
-    //     }
-        // setSchema(temp)
-        // if(document.getElementById(e.target.id).style.backgroundColor === "orange"){
-            // document.getElementById(e.target.id).style.backgroundColor = "#00b4cca9";
-            // document.getElementById(`drop-board-${e.target.id}`).style.display = "none"
-        // } else {
-            // document.getElementById(e.target.id).style.backgroundColor = "orange";
-            // document.getElementById(`drop-board-${e.target.id}`).style.display = "block"
-            // document.getElementById(`drop-board-${e.target.id}`).textContent = e.target.textContent
-        // }
-    // }
 
     return (
         <div className="board">
-            <div className="schema-board"></div>
             {/* {data !== undefined && <button className="schema" id="0">Query</button>} */}
             {/* {data !== undefined && <button className="schema" id="1">Mutation</button>} */}
+            <div className="toolBoard" id="toolBoard">
+                {/* {data !== undefined && <button className="type" id="type">Type</button>} */}
+            </div>
             <div className="Query" id="drop-board-0"></div>
             <div className="Mutation" id="drop-board-1"></div>
         </div>

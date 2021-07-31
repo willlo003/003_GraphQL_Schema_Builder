@@ -226,3 +226,19 @@ textarea {
   background-color: orange;
   font-size: 1.2em;
 }
+
+#drop-board-0 > button {
+  position: absolute;
+}
+
+#bin {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  width: 80px;
+  height: 100px;
+  background-image: url("https://www.freeiconspng.com/thumbs/garbage-bin-png/recycle-bin-garbage-bin-png-22.png");
+  background-size: 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+}

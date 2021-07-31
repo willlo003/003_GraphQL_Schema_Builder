@@ -4,31 +4,18 @@ type ChildProps = {
     // onClick?:(val: string) => void,
     data: object,
     dragStart: any,
-    dragEnd: any,
-    dragOver: any,
-    dragEnter: any,
-    dragLeave1: any,
-    drop1: any
   };
 
 const Data: React.FC<ChildProps> = ({
     data,
     dragStart,
-    dragEnd,
-    dragOver,
-    dragEnter,
-    dragLeave1,
-    drop1
+
 }) => {
     if(data !== undefined){
         let keys = Object.keys(data)
         let values = Object.values(data)
         let board = document.getElementsByClassName("data-list")
         board[0].innerHTML = '';
-        board[0].addEventListener("dragover", dragOver)
-        board[0].addEventListener("dragenter", dragEnter)
-        board[0].addEventListener("dragleave", dragLeave1)
-        board[0].addEventListener("drop", drop1)
 
         for (var i = 0; i < keys.length; i++) {
             let pair = document.createElement('div')
@@ -38,7 +25,6 @@ const Data: React.FC<ChildProps> = ({
             key.className = "key"
             key.draggable = true;
             key.addEventListener("dragstart", dragStart)
-            key.addEventListener("dragend", dragEnd)
             let value = document.createElement("p");
             value.textContent = values[i].toString().replaceAll(',', '\r\n')
             value.className = "value"
