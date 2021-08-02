@@ -28,7 +28,7 @@ const Board: React.FC<ChildProps> = ({
             const queryBoard = document.getElementById("drop-board-0")
             const mutationBoard = document.getElementById("drop-board-1")
 
-            queryBoard.style.minHeight = `${height/2}px`
+            queryBoard.style.minHeight = `230px`
             queryBoard.style.padding = `10px`
             let querryBackground = document.createElement('div')
             querryBackground.textContent = "Query"
@@ -39,7 +39,7 @@ const Board: React.FC<ChildProps> = ({
             queryBoard.addEventListener("dragleave", dragLeave)
             queryBoard.addEventListener("drop", drop)
 
-            mutationBoard.style.minHeight = `${height/2}px`
+            mutationBoard.style.minHeight = `230px`
             mutationBoard.style.padding = `10px`
             let mutationBackground = document.createElement('div')
             mutationBackground.textContent = "Mutation"
@@ -53,6 +53,7 @@ const Board: React.FC<ChildProps> = ({
             const tool = document.getElementById("toolBoard")
             let type = document.createElement('button')
             type.textContent = "Type"
+            type.className = "type"
             type.draggable = true;
             type.cloneNode(true);
             tool.append(type)

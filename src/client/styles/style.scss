@@ -60,6 +60,7 @@ label {
 
 .pair {
   text-align: center;
+  position: relative;
 }
 
 .key {
@@ -68,7 +69,6 @@ label {
   width: 90%;
   border: 2px solid #ffffff;
   background: #1f383b;
-  left: 5%;
   color: #fff;
   border-radius: 10px;
   font-size: 10x;
@@ -139,7 +139,7 @@ label {
   white-space: pre;
   /* Position the tooltip */
   position: absolute;
-  left: 12%;
+  left: 100%;
   margin-top: -25px;
   z-index: 1;
   opacity: 0.7;
@@ -156,12 +156,12 @@ label {
   border-color: black transparent transparent transparent;
 }
 
-.key:hover {
+.pair > .key:hover {
   background-color: gray;
   transform: translateY(3px);
 }
 
-.key:active {
+.pair > .key:active {
   background-color: orange;
   transform: translateY(6px);
 }
@@ -233,12 +233,49 @@ textarea {
 
 #bin {
   position: absolute;
-  left: 5px;
-  bottom: 5px;
+  right: 50px;
+  top: 30px;
   width: 80px;
   height: 100px;
   background-image: url("https://www.freeiconspng.com/thumbs/garbage-bin-png/recycle-bin-garbage-bin-png-22.png");
   background-size: 50px;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.left {
+  border-radius: 50%;
+  padding: 5px;
+  position: absolute;
+  left: 4%;
+  top: 30%;
+}
+
+.right {
+  border-radius: 50%;
+  padding: 5px;
+  position: absolute;
+  left: 85%;
+  top: 30%;
+}
+
+.type {
+  position: absolute;
+  margin: 5px;
+  height: 36px;
+  width: 120px;
+  border: 2px solid #ffffff;
+  background: #56777a;
+  left: 10px;
+  top: 50px;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 10x;
+}
+
+.line {
+  transform-origin: top left;
+  height: 2px;
+  background: orange;
+  position: absolute;
 }

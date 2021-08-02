@@ -18,6 +18,7 @@ const Data: React.FC<ChildProps> = ({
         board[0].innerHTML = '';
 
         for (var i = 0; i < keys.length; i++) {
+            //create key value
             let pair = document.createElement('div')
             pair.className = "pair"
             let key = document.createElement("button");
@@ -43,6 +44,15 @@ const Data: React.FC<ChildProps> = ({
             board[0].appendChild(pair);
             pair.append(key)
             pair.append(value)
+
+            // let left = document.createElement("button")
+            // left.className = "left"
+            // left.draggable = true;
+            // pair.append(left)
+            // let right = document.createElement("button")
+            // right.className = "right"
+            // right.draggable = true;
+            // pair.append(right)
         }
     }
 
