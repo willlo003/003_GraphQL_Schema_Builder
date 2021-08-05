@@ -21,23 +21,14 @@ const App: React.FC = () => {
     let query = []
     let schema:string[] = []
     let dragItem;
-    let schemaMethod: string = '';
-    let head: string = `const {\n\tGraphQLSchema,\n\tGraphQLObjectType,\n\tGraphQLString,\n\tGraphQLList,\n\tGraphQLNonNull,\n\tGraphQLInt,\n} = require("graphql");`;
-    let schemaCode: string = `\n\nconst schema = new GraphQLSchema({\n ${schemaMethod}\n})`;
-    let code: string
-    let root: string
-    let db: string = `\n\nconst db = \'${link}\';`
-    let rootQueryField;
-    let rootQueryMethod;
-    let app = '\n\napp.use(\"/graphql\", expressGraphQL({\n\tschema: schema,\n\tgraphiql: true,\n}))';
     let type = [];
-    let typeCode = '';
     let leftCount = 0;
     let rightCount = 0;
-    let i, j
+    let i, j;
     let rootCount = 1;
     let typeCount = 1;
     let rootTypePair = {}
+    let typeDataPair = {}
     //for connect
     let connection = [];
     let connectedPair = {};
@@ -244,9 +235,17 @@ const App: React.FC = () => {
                         findTypeKey = key
                     }
                 }
-                
+      
                 delete rootTypePair[findTypeKey]
             }
+
+            if(dragItem.className === "key"){
+                let connectedTypeValue = document.getElementById(connectedPair[leftChild.id]).parentElement.children[0].value
+                delete typeDataPair[connectedTypeValue];
+            }
+
+
+
             // let textContent = document.getElementById(leftChild.id).parentElement.className === 'type' ? document.getElementById(leftChild.id).parentElement.children[0].value : document.getElementById(connectedPair[leftChild.id]).parentElement.children[0].value;
             // let ind = type.indexOf(textContent)
             delete connectedPair[connectedPair[leftChild.id]]
@@ -254,10 +253,26 @@ const App: React.FC = () => {
         }
         if(rightChild.style.backgroundColor === "orange"){
             document.getElementById(connectedPair[rightChild.id]).style.backgroundColor = "white";
+            document.getElementById(`L${connectedPair[rightChild.id]}`).remove();
+            // let textContent = document.getElementById(rightChild.id).parentElement.className === 'type' ? document.getElementById(rightChild.id).parentElement.children[0].value : document.getElementById(connectedPair[rightChild.id]).parentElement.children[0].value;
+            // let ind = type.indexOf(textContent)
+            // type = type.slice(j, ind).concat(type.slice(ind + 1))
 
-            let textContent = document.getElementById(rightChild.id).parentElement.className === 'type' ? document.getElementById(rightChild.id).parentElement.children[0].value : document.getElementById(connectedPair[rightChild.id]).parentElement.children[0].value;
-            let ind = type.indexOf(textContent)
-            type = type.slice(j, ind).concat(type.slice(ind + 1))
+            if(dragItem.className === "type"){
+                let textContent = dragItem.children[0].value
+                let ind = type.indexOf(textContent)
+                type = type.slice(j, ind).concat(type.slice(ind + 1))
+                delete typeDataPair[textContent]
+            }
+
+            if(dragItem.className === "root"){
+                console.log("root thjrow")
+                let relatedType = rootTypePair[dragItem.children[0].value];
+                let ind = type.indexOf(relatedType);
+                type = type.slice(i, ind).concat(type.slice(ind + 1));
+                delete rootTypePair[dragItem.children[0].value]
+            }
+
             delete connectedPair[connectedPair[rightChild.id]]
             delete connectedPair[rightChild.id]
         }
@@ -290,6 +305,8 @@ const App: React.FC = () => {
                     let rightParent = document.getElementById(rightId).parentElement;
                     let typeParent = undefined;
                     let rootParent = undefined;
+                    let dataParent = undefined;
+
                     //find the parent is type
                     if (leftParent.className === "type"){
                         typeParent = leftParent
@@ -303,25 +320,48 @@ const App: React.FC = () => {
                     } else if (rightParent.className === "root"){
                         rootParent = rightParent
                     }
+
+                    //find the parent is data
+                    if (leftParent.className === "key"){
+                        dataParent = leftParent
+                    } else if (rightParent.className === "key"){
+                        dataParent = rightParent
+                    }
+
                     //turn to white color
                     document.getElementById(leftId).style.backgroundColor = "white";
                     document.getElementById(rightId).style.backgroundColor = "white";
 
                     //delete the rootTypePair
-                    delete rootTypePair[rootParent.children[0].value]
+                    if(rootParent !== undefined){
+                        delete rootTypePair[rootParent.children[0].value]
+                    }
 
                     //delete the element in type array
-                    if(typeParent !== undefined){
+                    if(typeParent !== undefined && rootParent !== undefined){
                         let ind = type.indexOf(typeParent.children[0].value)
                         type = type.slice(0, ind).concat(type.slice(ind + 1))
-                        delete rootTypePair[typeParent.children[0].value]
+                    }                    
+                    
+                    //delete the element about adata
+                    if(dataParent !== undefined){
+                        let typeKey = typeParent.children[0].value
+                        if(typeDataPair.hasOwnProperty(typeKey)){
+                            if(typeDataPair[typeKey].length === 1){
+                                delete typeDataPair[typeKey]
+                            } else {
+                                console.log("delete the element in array, write it later la")
+                            }
+                        }
                     }
+
+
+                    delete connectedPair[leftId]
+                    delete connectedPair[rightId]
 
                     updateCode(schema)
 
                     //delete the connected pair
-                    delete connectedPair[leftId]
-                    delete connectedPair[rightId]
 
                     //remove the line
                     document.getElementById(`L${leftId}`).remove();
@@ -348,11 +388,10 @@ const App: React.FC = () => {
                     let leftParent = document.getElementById(tempPair[0]).parentElement
                     let rightParent = document.getElementById(tempPair[1]).parentElement;
                     let typeParent = undefined;
-                    //find the parent is type
-                    if (leftParent.className === "type" && rightParent.className === "root"){
-                        typeParent = leftParent
-                        rootTypePair[rightParent.children[0].value] = leftParent.children[0].value
-                    } else if (rightParent.className === "type" && leftParent.className === "root"){
+                    let dataParent = undefined;
+
+                    //find the parents are root-type
+                    if (rightParent.className === "type" && leftParent.className === "root"){
                         typeParent = rightParent
                         rootTypePair[leftParent.children[0].value] = rightParent.children[0].value
                     }
@@ -365,15 +404,28 @@ const App: React.FC = () => {
                             for (let key in rootTypePair){
                                 if(rootTypePair[key]===type[typeInd]){
                                     rootTypePairKey = key
-                                    break;
                                 }
+                            }
+                            if(typeDataPair.hasOwnProperty(type[typeInd])){
+                                typeDataPair[e.target.value] = typeDataPair[type[typeInd]]
+                                delete typeDataPair[type[typeInd]]
                             }
                             rootTypePair[rootTypePairKey] = e.target.value
                             type[typeInd] = e.target.value
                             updateCode(schema)
                         }
                     }
-              
+
+                    //find the parents are type-data
+                    if (rightParent.className === "key" && leftParent.className === "type"){
+                        dataParent = rightParent
+                        if(typeDataPair.hasOwnProperty(leftParent.children[0].value)){
+                            typeDataPair[leftParent.children[0].value].push(dataParent.textContent)
+                        } else {
+                            typeDataPair[leftParent.children[0].value] = [dataParent.textContent]
+                        }
+                    }
+
                     updateCode(schema)
                     linedraw(connection[0] + 5, connection[1] + 5, connection[2] + 5, connection[3] + 5, lineID)
                     tempPair = [];
@@ -409,12 +461,19 @@ const App: React.FC = () => {
         console.log("rootTypePair", rootTypePair)
         console.log("type", type)
         console.log("query", query)
+        console.log("typeDataPair", typeDataPair)
+        console.log("connectedPair", connectedPair)
         //reset the content
-        schemaMethod = '';
-        root = '';
-        rootQueryField = '';
-        schemaCode = '';
-        typeCode = '';
+        let head: string = `const {\n\tGraphQLSchema,\n\tGraphQLObjectType,\n\tGraphQLString,\n\tGraphQLList,\n\tGraphQLNonNull,\n\tGraphQLInt,\n} = require("graphql");`;
+        let app = '\n\napp.use(\"/graphql\", expressGraphQL({\n\tschema: schema,\n\tgraphiql: true,\n}))';
+        let schemaMethod = '';
+        let root = '';
+        let rootQueryField = '';
+        let schemaCode = '';
+        let typeCode = '';
+        let code = '';
+        let rootQueryMethod;
+        let typeField = {};
 
         //update root of query
         // if (query.length !== 0) {
@@ -424,9 +483,18 @@ const App: React.FC = () => {
         rootQueryMethod = `\n\tname: \"Query\",\n\tdescription: \"Root Query\",\n\tfields: () => ({${rootQueryField}\n\t}),`
         // }
 
+        for (let key in typeDataPair){
+            typeField[key] = ''
+            typeDataPair[key].forEach( e => typeField[key] += `\n\t\t${e}: {\n\t\t\ttype: GraphQLNonNull(GraphQLString),\n\t\t},`)
+        }
+
         //update type
         type.forEach((e) => {
-            typeCode += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "data",\n\tdescription: "",\n\tfields: () => ({\n\t\tmotd: {\n\t\t\ttype: GraphQLNonNull(GraphQLString),\n\t\t},\n\t}),\n});`
+            if(typeField[e] === undefined){
+                typeCode += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "data",\n\tdescription: "",\n\tfields: () => ({\n\t}),\n});`
+            } else {
+                typeCode += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "data",\n\tdescription: "",\n\tfields: () => ({${typeField[e]}\n\t}),\n});`
+            }
         })
 
         //update schema
