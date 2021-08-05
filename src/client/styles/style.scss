@@ -259,7 +259,31 @@ textarea {
   top: 30%;
 }
 
+.line {
+  transform-origin: top left;
+  height: 2px;
+  background: orange;
+  position: absolute;
+}
+
 .type {
+  position: absolute;
+  margin: 5px;
+  height: 36px;
+  width: 120px;
+  border: 2px solid #ffffff;
+  background: rgb(146, 52, 104);
+  left: 10px;
+  top: 20px;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 10x;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.root {
   position: absolute;
   margin: 5px;
   height: 36px;
@@ -267,15 +291,29 @@ textarea {
   border: 2px solid #ffffff;
   background: #56777a;
   left: 10px;
-  top: 50px;
+  top: 60px;
   color: #fff;
   border-radius: 10px;
   font-size: 10x;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
-.line {
-  transform-origin: top left;
-  height: 2px;
-  background: orange;
-  position: absolute;
+.type > .typeInput {
+  width: 60%;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #75c2cc75;
+  color: white;
+  border: none;
+}
+
+.root > .rootInput {
+  width: 60%;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #75c2cc75;
+  color: white;
+  border: none;
 }

@@ -51,13 +51,31 @@ const Board: React.FC<ChildProps> = ({
             mutationBoard.addEventListener("drop", drop)
 
             const tool = document.getElementById("toolBoard")
-            let type = document.createElement('button')
-            type.textContent = "Type"
-            type.className = "type"
+
+            const type = document.createElement('div')
+            const typeInput = document.createElement('input')
+            typeInput.className = 'typeInput';
+            typeInput.value = "Type";
+            // type.textContent = "Type"
+            type.className = "type";
             type.draggable = true;
             type.cloneNode(true);
+            type.append(typeInput)
             tool.append(type)
             type.addEventListener("dragstart", dragStart1)
+
+            const root = document.createElement('div')
+            const rootInput = document.createElement('input')
+            rootInput.className = 'rootInput';
+            rootInput.value = "Root";
+
+            // root.textContent = "Name?"
+            root.className = "root";
+            root.draggable = true;
+            root.cloneNode(true);
+            tool.append(root)
+            root.append(rootInput)
+            root.addEventListener("dragstart", dragStart1)
         }
       }, [data])
 
