@@ -5,6 +5,7 @@ import Code from "./Code";
 import Board from "./Board";
 import Bin from "./Bin";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { useEffect } from "react";
 const createHistory = require("history").createBrowserHistory
 
 const App: React.FC = () => {
@@ -18,7 +19,8 @@ const App: React.FC = () => {
     const history = createHistory();
 
     //for code gen
-    let query = []
+    let query = [];
+    let mutation = []
     let schema:string[] = []
     let dragItem;
     let type = [];
@@ -35,6 +37,9 @@ const App: React.FC = () => {
     let tempPair = [];
     //bin
 
+    // useEffect(()=>{
+    //     console.log("omgomgomogmog")
+    // },[query])
     ///////////// drag card from data list
     function dragStart(){
         if(this.parentElement.className === "pair"){
@@ -110,13 +115,13 @@ const App: React.FC = () => {
             dragItem.addEventListener("dragstart", dragStart)
             
             //add new root 
-            if(dragItem.parentElement === null){
-                query.push(dragItem.children[0].value)
-            }
-
-            //assign onchange function to the root card
-            let queryInd = query.indexOf(dragItem.children[0].value)
-            dragItem.children[0].onchange = function(e){
+            if(this.className === "Query"){
+                if(query.indexOf(dragItem.children[0].value) === -1){
+                    query.push(dragItem.children[0].value)
+                }
+                //assign onchange function to the root card
+                let queryInd = query.indexOf(dragItem.children[0].value)
+                dragItem.children[0].onchange = function(e){
                 if( rootTypePair.hasOwnProperty(query[queryInd])){
                     let value = rootTypePair[query[queryInd]]
                     delete rootTypePair[query[queryInd]]
@@ -124,6 +129,22 @@ const App: React.FC = () => {
                 }
                 query[queryInd] = e.target.value
                 updateCode(schema)
+                }
+            } else if(this.className === "Mutation"){
+                if(mutation.indexOf(dragItem.children[0].value) === -1){
+                    mutation.push(dragItem.children[0].value)
+                }
+                //assign onchange function to the root card
+                let mutationInd = mutation.indexOf(dragItem.children[0].value)
+                dragItem.children[0].onchange = function(e){
+                if( rootTypePair.hasOwnProperty(mutation[mutationInd])){
+                    let value = rootTypePair[mutation[mutationInd]]
+                    delete rootTypePair[mutation[mutationInd]]
+                    rootTypePair[e.target.value] = value
+                }
+                mutation[mutationInd] = e.target.value
+                updateCode(schema)
+                }
             }
 
             //when no any root, even no query
@@ -199,9 +220,14 @@ const App: React.FC = () => {
     function drop2(){
         //when throw the root card, update the query array
         if(dragItem.className === "root"){
-            let index = query.indexOf(dragItem.children[0].value)
-            query.splice(index, 1)
-            if(query.length === 0){ schema = []}
+            if (dragItem.parentElement.className === "Query"){
+                let index = query.indexOf(dragItem.children[0].value)
+                query.splice(index, 1)
+            } else if (dragItem.parentElement.className === "Mutation"){
+                let index = mutation.indexOf(dragItem.children[0].value)
+                mutation.splice(index, 1)
+            }
+            if(query.length === 0 && mutation.length === 0){ schema = []}
         }
 
         if(dragItem.className === "key"){
@@ -244,10 +270,6 @@ const App: React.FC = () => {
                 delete typeDataPair[connectedTypeValue];
             }
 
-
-
-            // let textContent = document.getElementById(leftChild.id).parentElement.className === 'type' ? document.getElementById(leftChild.id).parentElement.children[0].value : document.getElementById(connectedPair[leftChild.id]).parentElement.children[0].value;
-            // let ind = type.indexOf(textContent)
             delete connectedPair[connectedPair[leftChild.id]]
             delete connectedPair[leftChild.id]
         }
@@ -284,6 +306,8 @@ const App: React.FC = () => {
                 //     index = schema.indexOf(dragItem.textContent)
                 //     schema.splice(index, 1)
                 // } 
+            } else if(dragItem.parentElement.className === "Mutation"){
+                dragItem.parentElement.removeChild(dragItem)
             }
         }
         
@@ -294,87 +318,100 @@ const App: React.FC = () => {
     //when the card connect
     function lineUp (){
         let position = this.getBoundingClientRect()
+        let eventX = position.left
+        let eventY = position.top
         let currentID = this.id
         if(tempPair.length === 0 || (tempPair.length === 1 && tempPair[0][1] !== currentID[1] && tempPair[0][0] !== currentID[0])|| (tempPair.length === 1 && tempPair[0]===currentID)){
             if(this.style.backgroundColor === "orange"){
-                if(connectedPair.hasOwnProperty(currentID)){
-                    let leftId = currentID[0] === 'l' ? currentID : [connectedPair[currentID]];
-                    let rightId = currentID[0] === 'r' ? currentID : [connectedPair[currentID]];
-
-                    let leftParent = document.getElementById(leftId).parentElement
-                    let rightParent = document.getElementById(rightId).parentElement;
-                    let typeParent = undefined;
-                    let rootParent = undefined;
-                    let dataParent = undefined;
-
-                    //find the parent is type
-                    if (leftParent.className === "type"){
-                        typeParent = leftParent
-                    } else if (rightParent.className === "type"){
-                        typeParent = rightParent
-                    }
-
-                    //find the parent is root
-                    if (leftParent.className === "root"){
-                        rootParent = leftParent
-                    } else if (rightParent.className === "root"){
-                        rootParent = rightParent
-                    }
-
-                    //find the parent is data
-                    if (leftParent.className === "key"){
-                        dataParent = leftParent
-                    } else if (rightParent.className === "key"){
-                        dataParent = rightParent
-                    }
-
-                    //turn to white color
-                    document.getElementById(leftId).style.backgroundColor = "white";
-                    document.getElementById(rightId).style.backgroundColor = "white";
-
-                    //delete the rootTypePair
-                    if(rootParent !== undefined){
-                        delete rootTypePair[rootParent.children[0].value]
-                    }
-
-                    //delete the element in type array
-                    if(typeParent !== undefined && rootParent !== undefined){
-                        let ind = type.indexOf(typeParent.children[0].value)
-                        type = type.slice(0, ind).concat(type.slice(ind + 1))
-                    }                    
-                    
-                    //delete the element about adata
-                    if(dataParent !== undefined){
-                        let typeKey = typeParent.children[0].value
-                        if(typeDataPair.hasOwnProperty(typeKey)){
-                            if(typeDataPair[typeKey].length === 1){
-                                delete typeDataPair[typeKey]
-                            } else {
-                                console.log("delete the element in array, write it later la")
+                if(tempPair.length === 0){
+                    if(connectedPair.hasOwnProperty(currentID)){
+                        let leftId = currentID[0] === 'l' ? currentID : [connectedPair[currentID]];
+                        let rightId = currentID[0] === 'r' ? currentID : [connectedPair[currentID]];
+    
+                        let leftParent = document.getElementById(leftId).parentElement
+                        let rightParent = document.getElementById(rightId).parentElement;
+                        let typeParent = undefined;
+                        let rootParent = undefined;
+                        let dataParent = undefined;
+    
+                        //find the parent is type
+                        if (leftParent.className === "type"){
+                            typeParent = leftParent
+                        } else if (rightParent.className === "type"){
+                            typeParent = rightParent
+                        }
+    
+                        //find the parent is root
+                        if (leftParent.className === "root"){
+                            rootParent = leftParent
+                        } else if (rightParent.className === "root"){
+                            rootParent = rightParent
+                        }
+    
+                        //find the parent is data
+                        if (leftParent.className === "key"){
+                            dataParent = leftParent
+                        } else if (rightParent.className === "key"){
+                            dataParent = rightParent
+                        }
+    
+                        //turn to white color
+                        document.getElementById(leftId).style.backgroundColor = "white";
+                        document.getElementById(rightId).style.backgroundColor = "white";
+    
+                        //delete the rootTypePair
+                        if(rootParent !== undefined){
+                            delete rootTypePair[rootParent.children[0].value]
+                        }
+    
+                        //delete the element in type array
+                        if(typeParent !== undefined && rootParent !== undefined){
+                            let ind = type.indexOf(typeParent.children[0].value)
+                            type = type.slice(0, ind).concat(type.slice(ind + 1))
+                        }                    
+                        
+                        //delete the element about adata
+                        if(dataParent !== undefined){
+                            let typeKey = typeParent.children[0].value
+                            if(typeDataPair.hasOwnProperty(typeKey)){
+                                if(typeDataPair[typeKey].length === 1){
+                                    delete typeDataPair[typeKey]
+                                } else {
+                                    console.log("delete the element in array, write it later la")
+                                }
                             }
                         }
+    
+                        delete connectedPair[leftId]
+                        delete connectedPair[rightId]
+    
+                        updateCode(schema)
+    
+                        //delete the connected pair
+    
+                        //remove the line
+                        document.getElementById(`L${leftId}`).remove();
+                    } else {
+                        this.style.backgroundColor = "white";
+                        tempPair = [];
                     }
-
-
-                    delete connectedPair[leftId]
-                    delete connectedPair[rightId]
-
-                    updateCode(schema)
-
-                    //delete the connected pair
-
-                    //remove the line
-                    document.getElementById(`L${leftId}`).remove();
                 } else {
-                    this.style.backgroundColor = "white";
+                    let curruntIdParentValue = document.getElementById(currentID).parentElement.children[0].value;
+                    typeDataPair[curruntIdParentValue].push(document.getElementById(tempPair[0]).parentElement.textContent)
+                    connection.push(eventX)
+                    connection.push(eventY)
+                    tempPair.push(currentID)
+                    connectedPair[tempPair[0]] = currentID
+                    linedraw(connection[0] + 5, connection[1] + 5, connection[2] + 5, connection[3] + 5, tempPair[0])
+                    connection = [];
                     tempPair = [];
+                    updateCode(schema);
                 }
             } else {
                 this.style.backgroundColor = "orange"
 
                 //find the position to connect
-                let eventX = position.left
-                let eventY = position.top
+               
                 
                 connection.push(eventX)
                 connection.push(eventY)
@@ -397,21 +434,33 @@ const App: React.FC = () => {
                     }
 
                     if(typeParent !== undefined){
-                        type.push(typeParent.children[0].value)
+                        if(leftParent.parentElement.className === "Query"){
+                            type.push(typeParent.children[0].value)
+                        }
                         let typeInd = type.indexOf(typeParent.children[0].value)
                         typeParent.children[0].onchange = function(e){
-                            let rootTypePairKey;
-                            for (let key in rootTypePair){
-                                if(rootTypePair[key]===type[typeInd]){
-                                    rootTypePairKey = key
+                            if(typeInd === -1){
+                                let rootValue = document.getElementById(connectedPair[this.parentElement.children[1].id]).parentElement.children[0].value
+                                rootTypePair[rootValue] = e.target.value
+                            } else {
+                                let rootTypePairKey;
+                                for (let key in rootTypePair){
+                                    console.log("key", key, rootTypePair, typeInd)
+                                    if(rootTypePair[key]===type[typeInd]){
+                                        rootTypePairKey = key
+                                    }
+                                }
+    
+                                if(typeDataPair.hasOwnProperty(type[typeInd])){
+                                    typeDataPair[e.target.value] = typeDataPair[type[typeInd]]
+                                    delete typeDataPair[type[typeInd]]
+                                }
+    
+                                if(rootTypePairKey !== undefined){
+                                    rootTypePair[rootTypePairKey] = e.target.value
+                                    type[typeInd] = e.target.value
                                 }
                             }
-                            if(typeDataPair.hasOwnProperty(type[typeInd])){
-                                typeDataPair[e.target.value] = typeDataPair[type[typeInd]]
-                                delete typeDataPair[type[typeInd]]
-                            }
-                            rootTypePair[rootTypePairKey] = e.target.value
-                            type[typeInd] = e.target.value
                             updateCode(schema)
                         }
                     }
@@ -458,9 +507,11 @@ const App: React.FC = () => {
     }
 
     function updateCode(newSchema){
-        console.log("rootTypePair", rootTypePair)
+        console.log("-----------------------------")
         console.log("type", type)
         console.log("query", query)
+        console.log("mutation", mutation)
+        console.log("rootTypePair", rootTypePair)
         console.log("typeDataPair", typeDataPair)
         console.log("connectedPair", connectedPair)
         //reset the content
@@ -469,11 +520,14 @@ const App: React.FC = () => {
         let schemaMethod = '';
         let root = '';
         let rootQueryField = '';
+        let rootMutationField = '';
         let schemaCode = '';
         let typeCode = '';
         let code = '';
         let rootQueryMethod;
+        let rootMutationMethod;
         let typeField = {};
+        let nameCount = 1;
 
         //update root of query
         // if (query.length !== 0) {
@@ -483,6 +537,14 @@ const App: React.FC = () => {
         rootQueryMethod = `\n\tname: \"Query\",\n\tdescription: \"Root Query\",\n\tfields: () => ({${rootQueryField}\n\t}),`
         // }
 
+        //update root of mutation
+        // if (query.length !== 0) {
+        mutation.forEach(e => {
+            rootMutationField += `\n\t\t${e}: {\n\t\t\ttype: ${rootTypePair[e]},\n\t\t\tdescription: \"\",\n\t\t\targs: {}, \n\t\t\t resolve: (parent, args) => {\n\t\t\t};\n\t\t\treturn data,\n\t\t},` 
+        })
+        rootMutationMethod = `\n\tname: \"Mutation\",\n\tdescription: \"Root Mutation\",\n\tfields: () => ({${rootMutationField}\n\t}),`
+        // }
+
         for (let key in typeDataPair){
             typeField[key] = ''
             typeDataPair[key].forEach( e => typeField[key] += `\n\t\t${e}: {\n\t\t\ttype: GraphQLNonNull(GraphQLString),\n\t\t},`)
@@ -490,11 +552,13 @@ const App: React.FC = () => {
 
         //update type
         type.forEach((e) => {
+            console.log("in type ", e)
             if(typeField[e] === undefined){
-                typeCode += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "data",\n\tdescription: "",\n\tfields: () => ({\n\t}),\n});`
+                typeCode += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "data${nameCount}",\n\tdescription: "",\n\tfields: () => ({\n\t}),\n});`
             } else {
-                typeCode += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "data",\n\tdescription: "",\n\tfields: () => ({${typeField[e]}\n\t}),\n});`
+                typeCode += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "data${nameCount}",\n\tdescription: "",\n\tfields: () => ({${typeField[e]}\n\t}),\n});`
             }
+            nameCount++
         })
 
         //update schema
@@ -504,7 +568,7 @@ const App: React.FC = () => {
                 root += `\n\nconst RootQueryType = new GraphQLObjectType({${rootQueryMethod}\n});`
             } else {
                 schemaMethod += '\n\tmutation: RootMutationType,'
-                root += "\n\nconst RootMutationType = new GraphQLObjectType({\n});"
+                root += `\n\nconst RootMutationType = new GraphQLObjectType({${rootMutationMethod}\n});`
             }
         })
         schemaCode = `\n\nconst schema = new GraphQLSchema({ ${schemaMethod}\n});`;

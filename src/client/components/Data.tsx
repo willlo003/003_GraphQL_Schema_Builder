@@ -45,84 +45,8 @@ const Data: React.FC<ChildProps> = ({
             pair.append(key)
             pair.append(value)
 
-            // let left = document.createElement("button")
-            // left.className = "left"
-            // left.draggable = true;
-            // pair.append(left)
-            // let right = document.createElement("button")
-            // right.className = "right"
-            // right.draggable = true;
-            // pair.append(right)
         }
     }
-
-    // useEffect(() => {
-        // let cards = document.getElementsByClassName("key")
-        // let dragItem;
-        // let width;
-        // let board = document.getElementsByClassName("drop-board-0")
-        // let dataList = document.getElementsByClassName("data-list")
-
-    
-        // for (let i = 0; i < cards.length; i++) {
-        //     cards[i].addEventListener("dragstart", dragStart)
-        //     cards[i].addEventListener("dragend", dragEnd)
-        //     cards[i].addEventListener("click", ()=>{console.log("sorry")})
-        // }
-        
-        // board[0].addEventListener("dragover", dragOver)
-        // board[0].addEventListener("dragenter", dragEnter)
-        // board[0].addEventListener("dragleave", dragLeave)
-        // board[0].addEventListener("drop", drop)
-
-        // dataList[0].addEventListener("dragover", dragOver)
-        // dataList[0].addEventListener("dragenter", dragEnter)
-        // dataList[0].addEventListener("dragleave", dragLeave1)
-        // dataList[0].addEventListener("drop", drop1)
-
-        // function dragStart(){
-        //     dragItem = this
-        //     width = this.clientWidth
-        //     dragItem.client = width
-        //     setTimeout(() => this.style.display ="none", 0)
-        // }
-    
-        // function dragEnd(){
-        //     setTimeout(() => this.style.display ="block", 0)
-        // }
-
-        // function dragOver(e){
-        //     e.preventDefault()
-        //     this.style.backgroundColor = "#7db2b9a9"
-        // }
-
-        // function dragEnter(e){
-        //     e.preventDefault()
-        // }
-
-        // function dragLeave(){
-        //     this.style.backgroundColor = "#436e747c"
-        // }
-
-        // function drop(){
-        //     if(dragItem !== undefined){
-        //         this.append(dragItem)
-        //     this.style.backgroundColor = "#436e747c"
-        //     }
-        // }
-
-        // function dragLeave1(){
-        //     this.style.backgroundColor = "#00b4cca9"
-        // }
-
-        // function drop1(){
-        //     if(dragItem !== undefined){
-        //         this.append(dragItem)
-        //     this.style.backgroundColor = "#00b4cca9"
-        //     }
-        // }
-    // }, [data])
-    
 
     return (
             <div className="data-list"></div>
