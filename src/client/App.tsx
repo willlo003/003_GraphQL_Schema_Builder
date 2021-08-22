@@ -1,9 +1,9 @@
 import React from "react";
-import Api from "./Api"
-import Data from "./Data";
-import Code from "./Code";
-import Board from "./Board";
-import Bin from "./Bin";
+import Api from "./components/Api"
+import Data from "./components/Data";
+import Code from "./components/Code";
+import Board from "./components/Board";
+import Bin from "./components/Bin";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useEffect } from "react";
 const createHistory = require("history").createBrowserHistory

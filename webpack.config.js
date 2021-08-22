@@ -1,31 +1,35 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./src/client/index.tsx",
+  mode: process.env.NODE_ENV,
+  entry: "./src/client/main.tsx",
   output: {
     publicPath: "/public/",
     filename: "bundle.js",
-    path: path.join(__dirname, "public"),
+    path: path.resolve(__dirname, "public"),
   },
-  mode: process.env.NODE_ENV,
   devServer: {
+    compress: true,
     port: 8080,
     publicPath: "/public/",
     proxy: {
-      "/": {
-        target: "http://localhost:3000",
-        // changeOrigin: true,
-      },
-      "/api": {
-        target: "http://localhost:3000/",
-        secure: false,
-        pathRewrite: { "^/api": "" },
-      },
-      "/graphql": {
-        target: "http://localhost:3000/",
-        secure: false,
-      },
+      "/": "http://localhost:3000/",
     },
+    // proxy: {
+    //   "/": {
+    //     target: "http://localhost:3000",
+    //     // changeOrigin: true,
+    //   },
+    //   "/api": {
+    //     target: "http://localhost:3000/",
+    //     secure: false,
+    //     pathRewrite: { "^/api": "" },
+    //   },
+    //   "/graphql": {
+    //     target: "http://localhost:3000/",
+    //     secure: false,
+    //   },
+    // },
   },
   module: {
     rules: [

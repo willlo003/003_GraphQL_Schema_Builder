@@ -1,13 +1,13 @@
 {
-  "name": "003_graphql_schema_builder",
+  "name": "BuildQL-master",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "serve": "webpack serve",
-    "start": "nodemon src/server/server.ts",
+    "start": "nodemon --exec ts-node -T src/server/server.ts",
     "build": "NODE_ENV=production webpack",
-    "dev": "concurrently \"cross-env NODE_ENV=development webpack serve --open \" \"NODE_ENV=production nodemon src/server/server.ts\""
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack serve --open \" \"NODE_ENV=production nodemon --exec ts-node -T src/server/server.ts\""
   },
   "nodemonConfig": {
     "ignore": [
@@ -35,6 +35,7 @@
     "source-map-loader": "^3.0.0",
     "style-loader": "^3.1.0",
     "ts-loader": "^9.2.3",
+    "tslib": "^2.3.1",
     "typescript": "^4.3.5",
     "webpack": "^5.44.0",
     "webpack-cli": "^4.7.2",
@@ -45,6 +46,7 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.8",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.5.1",
