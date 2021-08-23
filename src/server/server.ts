@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import * as dataController from "./controllers/dataController";
-// import * as testController from "./controllers/testController";
 
 // const expressPlayground =
 //   require("graphql-playground-middleware-express").default;

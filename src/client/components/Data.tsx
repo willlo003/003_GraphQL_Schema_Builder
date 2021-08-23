@@ -1,56 +1,65 @@
-import React from "react";
+import { monitorEventLoopDelay } from "node:perf_hooks";
+import React, { useEffect } from "react";
+import { useDrag } from "react-dnd";
+import { ItemTypes } from "../dnd/items";
 
 type ChildProps = {
-    // onClick?:(val: string) => void,
-    data: object,
-    dragStart: any,
-  };
+  // onClick?:(val: string) => void,
+  data: any;
+  // dragStart: any,
+  dataKey: any;
+};
 
 const Data: React.FC<ChildProps> = ({
-    data,
-    dragStart,
-
+  data,
+  dataKey,
+  // dragStart,
 }) => {
-    if(data !== undefined){
-        let keys = Object.keys(data)
-        let values = Object.values(data)
-        let board = document.getElementsByClassName("data-list")
-        board[0].innerHTML = '';
+  const [content, setContent] = React.useState<string>("");
 
-        for (var i = 0; i < keys.length; i++) {
-            //create key value
-            let pair = document.createElement('div')
-            pair.className = "pair"
-            let key = document.createElement("button");
-            key.textContent = keys[i]
-            key.className = "key"
-            key.draggable = true;
-            key.addEventListener("dragstart", dragStart)
-            let value = document.createElement("p");
-            value.textContent = values[i].toString().replaceAll(',', '\r\n')
-            value.className = "value"
-            
-            key.onclick = (e) => {
-                console.log(e.target)
-                if (value.style.visibility === "visible") {
-                    value.style.visibility = "hidden"
-                    key.style.backgroundColor = "#1f383b"
-                } else {
-                    value.style.visibility = "visible"
-                    key.style.backgroundColor = "orange"
-                }
-            }
-
-            board[0].appendChild(pair);
-            pair.append(key)
-            pair.append(value)
-
-        }
+  // create the data cards
+  useEffect(() => {
+    let contentStrin: string = "";
+    if (typeof data[dataKey] === "object") {
+      for (const subKey in data[dataKey]) {
+        contentStrin += `${subKey}: ${data[dataKey][subKey]}\r\n`;
+      }
+    } else {
+      contentStrin += data[dataKey].toString().replaceAll(",", "\r\n");
     }
 
-    return (
-            <div className="data-list"></div>
-    )
-}
+    setContent(contentStrin);
+  }, [data]);
+
+  //onClick function
+  function onClick(e: any) {
+    let key = e.target;
+    let child = e.target.children[0];
+    if (child.style.visibility === "visible") {
+      child.style.visibility = "hidden";
+      key.style.backgroundColor = "#1f383b";
+    } else {
+      child.style.visibility = "visible";
+      key.style.backgroundColor = "orange";
+    }
+  }
+
+  //   useDrag
+  const [{ isDragging }, drag]: any = useDrag({
+    type: ItemTypes.DATA,
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
+  return (
+    <div className="pair">
+      <button className="key" onClick={onClick} ref={drag}>
+        {dataKey}
+        <p className="value">{content}</p>
+      </button>
+    </div>
+  );
+};
 
 export default Data;

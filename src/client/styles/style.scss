@@ -2,12 +2,18 @@ body {
   background: #f2f2f2;
   font-family: "Open Sans", sans-serif;
 }
+
 h1 {
   text-align: center;
 }
 
+.content {
+  display: flex;
+}
+
+/////////////////////////////////// Api
 label {
-  color: red;
+  color: rgb(0, 110, 255);
 }
 
 .fetching {
@@ -58,183 +64,7 @@ label {
   font-size: 1.2em;
 }
 
-.pair {
-  text-align: center;
-  position: relative;
-}
-
-.key {
-  margin: 5px;
-  height: 36px;
-  width: 90%;
-  border: 2px solid #ffffff;
-  background: #1f383b;
-  color: #fff;
-  border-radius: 10px;
-  font-size: 10x;
-}
-
-.querryBackground,
-.mutationBackground {
-  position: absolute;
-  font-size: 80px;
-  text-align: center;
-  color: grey;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  z-index: -1;
-}
-
-.content {
-  display: flex;
-}
-
-.data-list {
-  margin: 10px;
-  background: #00b4cca9;
-  border-radius: 10px;
-  width: 150px;
-}
-
-.board {
-  width: 750px;
-}
-
-.Query {
-  margin: 10px;
-  background: #00b4cca9;
-  border-radius: 10px;
-  width: 700px;
-  background: #436e747c;
-}
-
-.Mutation {
-  margin: 10px;
-  background: #00b4cca9;
-  border-radius: 10px;
-  width: 700px;
-  background: #436e747c;
-  font-size: 80px;
-  text-align: center;
-  color: grey;
-  vertical-align: middle;
-}
-
-.Query > button {
-  width: 120px;
-}
-
-.Mutation > button {
-  width: 120px;
-}
-
-.value {
-  visibility: hidden;
-  background-color: black;
-  color: #fff;
-  font-size: 16px;
-  border-radius: 6px;
-  padding: 10px;
-  white-space: pre;
-  /* Position the tooltip */
-  position: absolute;
-  left: 100%;
-  margin-top: -25px;
-  z-index: 1;
-  opacity: 0.7;
-}
-
-.value::after {
-  content: "";
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  margin-left: -10px;
-  border-width: 10px;
-  border-style: solid;
-  border-color: black transparent transparent transparent;
-}
-
-.pair > .key:hover {
-  background-color: gray;
-  transform: translateY(3px);
-}
-
-.pair > .key:active {
-  background-color: orange;
-  transform: translateY(6px);
-}
-
-.schema-board {
-  display: flex;
-}
-
-.schema {
-  height: 30px;
-  border: 2px solid #ffffff;
-  text-align: center;
-  background: #00b4cca9;
-  color: #fff;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 20px;
-  margin: 10px;
-}
-
-.schema:hover {
-  background-color: gray;
-  transform: translateY(3px);
-}
-
-.schema:active {
-  background-color: orange;
-  transform: translateY(6px);
-}
-
-textarea {
-  border-radius: 10px;
-  width: 500px;
-  margin: 10px;
-  background: #00b4cca9;
-  resize: vertical;
-}
-
-#test {
-  margin: 10px;
-  width: 500px;
-  height: 36px;
-  border: 1px solid #00b4cc;
-  background: #00b4cc;
-  text-align: center;
-  color: #fff;
-  border-radius: 0 0 0 0;
-  cursor: pointer;
-  font-size: 20px;
-  -webkit-transition: font-size 0.5s ease;
-  -moz-transition: font-size 0.5s ease;
-  -o-transition: font-size 0.5s ease;
-  transition: font-size 0.5s ease;
-}
-
-#test:hover {
-  background-color: orange;
-  font-size: 1.5em;
-}
-
-#test:active {
-  background-color: orange;
-  font-size: 1.2em;
-}
-
-#drop-board-0 > button {
-  position: absolute;
-}
-
-#drop-board-1 > button {
-  position: absolute;
-}
-
+/////////////////////////////////// Bin
 #bin {
   position: absolute;
   right: 50px;
@@ -245,6 +75,33 @@ textarea {
   background-size: 50px;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/////////////////////////////////// Board
+.board {
+  width: 750px;
+}
+
+.mutation-board,
+.query-board {
+  
+  margin: 10px;
+  background: #00b4cca9;
+  border-radius: 10px;
+  width: 700px;
+  padding: 10px;
+  min-height: 250px;
+  background: #436e747c;
+  font-size: 80px;
+  text-align: center;
+  color: grey;
+  vertical-align: middle;
+}
+
+.mutation-board > button, 
+.query-board > button {
+  position: absolute;
+  width: 120px;
 }
 
 .left {
@@ -321,3 +178,94 @@ textarea {
   color: white;
   border: none;
 }
+
+
+
+
+/////////////////////////////////// Data
+.pair {
+  text-align: center;  
+  position: relative;
+}
+
+.key {
+  margin: 5px;
+  height: 36px;
+  width: 90%;
+  border: 2px solid #ffffff;
+  background: #1f383b;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 10x;
+}
+
+.data-list {
+  margin: 10px;
+  background: #00b4cca9;
+  border-radius: 10px;
+  width: 120px;
+}
+
+.pair > .key:hover {
+  background-color: gray;
+  transform: translateY(3px);
+}
+
+.pair > .key:active {
+  background-color: orange;
+  transform: translateY(6px);
+}
+
+.value {
+  visibility: hidden;
+  background-color: black;
+  text-align: left;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 10px;
+  white-space: pre;
+  /* Position the tooltip */
+  position: absolute;
+  left: 105%;
+  margin-top: -25px;
+  z-index: 1;
+  opacity: 0.7;
+}
+
+.value::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 0%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+
+/////////////////////////////////// Code
+
+.code{
+  height: 100%;
+}
+
+textarea {
+  border-radius: 10px;
+  width: 500px;
+  height: 100%;
+  margin: 10px;
+  background: #0f1111a9;
+  resize: vertical;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #999;
+}
+
+
+
+
+
+
+
+
