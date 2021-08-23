@@ -1,4 +1,7 @@
+import { AnyARecord } from "dns";
 import React, { useEffect } from "react";
+import { useDrop } from "react-dnd";
+import { ItemTypes } from "../dnd/items";
 
 type ChildProps = {
   // onClick?:(val: string) => void,
@@ -20,6 +23,9 @@ const Board: React.FC<ChildProps> = ({
   // dragLeave,
   // drop,
 }) => {
+  const [leftCount, setLeftCount] = React.useState<number>(0);
+  const [rightCount, setRightCount] = React.useState<number>(0);
+
   useEffect(() => {
     // if(data !== undefined){
     //     let height = document.querySelector(".board").clientHeight
@@ -59,6 +65,26 @@ const Board: React.FC<ChildProps> = ({
     // }
   }, [data]);
 
+  function drappingCard(item: any, monitor: any) {
+    let queryBoard: any = document.getElementById("query-board");
+    // const dragItem: any = document.getElementById(item.id);
+    console.log(item);
+    // let keyCard = card.dragItem.cloneNode(true);
+    // keyCard.className = "key";
+    // queryBoard.append(dragItem);
+    // keyCard.style.left = event.clientX + "px";
+    // keyCard.style.top = 22 + "px";
+  }
+
+  // useDrop
+  const [{ isOver }, dropToQuery]: any = useDrop({
+    accept: ItemTypes.DATA,
+    drop: (item, monitor) => drappingCard(item, monitor),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
+
   return (
     <div className="board">
       <div className="tool-board" id="tool-board">
@@ -69,7 +95,7 @@ const Board: React.FC<ChildProps> = ({
           <input className="rootInput" value="Root"></input>
         </div>
       </div>
-      <div className="query-board" id="query-board">
+      <div className="query-board" id="query-board" ref={dropToQuery}>
         Query
       </div>
       <div className="mutation-board" id="mutation-board">

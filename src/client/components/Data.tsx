@@ -8,11 +8,13 @@ type ChildProps = {
   data: any;
   // dragStart: any,
   dataKey: any;
+  id: number;
 };
 
 const Data: React.FC<ChildProps> = ({
   data,
   dataKey,
+  id,
   // dragStart,
 }) => {
   const [content, setContent] = React.useState<string>("");
@@ -43,18 +45,34 @@ const Data: React.FC<ChildProps> = ({
       key.style.backgroundColor = "orange";
     }
   }
+  const dragItem: any = document.getElementById(`data${id}`);
 
   //   useDrag
-  const [{ isDragging }, drag]: any = useDrag({
+  //   const [{ isDragging }, drag]: any = useDrag({
+  //     type: ItemTypes.DATA,
+  //     item: () => ({ ok: "ok" }),
+  //     //   options: {
+  //     //     dropEffect: "copy",
+  //     //   },
+  //     collect: (monitor) => ({
+  //       isDragging: !!monitor.isDragging(),
+  //     }),
+  //   });
+
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.DATA,
+    item: () => ({ dragItem }),
+    options: {
+      dropEffect: "copy",
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-  });
+  }));
 
   return (
     <div className="pair">
-      <button className="key" onClick={onClick} ref={drag}>
+      <button className="key" onClick={onClick} id={`data${id}`} ref={drag}>
         {dataKey}
         <p className="value">{content}</p>
       </button>

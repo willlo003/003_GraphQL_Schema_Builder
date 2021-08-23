@@ -677,7 +677,11 @@ const App: React.FC = () => {
       <div className="content">
         <div className="data-list">
           {dataKeys.map((dataKey) => (
-            <Data data={data} dataKey={dataKey} />
+            <Data
+              data={data}
+              dataKey={dataKey}
+              id={dataKeys.indexOf(dataKey)}
+            />
           ))}
         </div>
         {
