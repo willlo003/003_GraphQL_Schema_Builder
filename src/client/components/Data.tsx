@@ -1,4 +1,3 @@
-import { monitorEventLoopDelay } from "node:perf_hooks";
 import React, { useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../dnd/items";
@@ -45,30 +44,15 @@ const Data: React.FC<ChildProps> = ({
       key.style.backgroundColor = "orange";
     }
   }
-  const dragItem: any = document.getElementById(`data${id}`);
 
-  //   useDrag
-  //   const [{ isDragging }, drag]: any = useDrag({
-  //     type: ItemTypes.DATA,
-  //     item: () => ({ ok: "ok" }),
-  //     //   options: {
-  //     //     dropEffect: "copy",
-  //     //   },
-  //     collect: (monitor) => ({
-  //       isDragging: !!monitor.isDragging(),
-  //     }),
-  //   });
-
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.DATA,
-    item: () => ({ dragItem }),
-    options: {
-      dropEffect: "copy",
-    },
+    item: () => ({ id: `data${id}`, key: `${dataKey}` }),
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
-  }));
+  });
+  const opacity = isDragging ? 0 : 1;
 
   return (
     <div className="pair">

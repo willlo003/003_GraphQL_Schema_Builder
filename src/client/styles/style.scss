@@ -1,6 +1,7 @@
 body {
   background: #f2f2f2;
   font-family: "Open Sans", sans-serif;
+  overflow: hidden
 }
 
 h1 {
@@ -82,11 +83,18 @@ label {
   width: 750px;
 }
 
+.query-root,
+.query-type,
+.query-data {
+  border: 1px solid red;
+  height: 100%;
+}
+
 .mutation-board,
 .query-board {
-  
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
   margin: 10px;
-  background: #00b4cca9;
   border-radius: 10px;
   width: 700px;
   padding: 10px;
@@ -104,7 +112,7 @@ label {
   width: 120px;
 }
 
-.left {
+.left, .right {
   border-radius: 50%;
   padding: 5px;
   position: absolute;
@@ -113,11 +121,7 @@ label {
 }
 
 .right {
-  border-radius: 50%;
-  padding: 5px;
-  position: absolute;
   left: 85%;
-  top: 30%;
 }
 
 .line {
@@ -127,7 +131,7 @@ label {
   position: absolute;
 }
 
-.type {
+.type, .root {
   position: absolute;
   margin: 5px;
   height: 36px;
@@ -145,14 +149,19 @@ label {
 }
 
 .root {
-  position: absolute;
+  background: #56777a;
+  top: 60px;
+}
+
+.dropped-data, .dropped-type, .dropped-root  {
+  position: relative;
   margin: 5px;
   height: 36px;
   width: 120px;
   border: 2px solid #ffffff;
-  background: #56777a;
+  background: rgb(146, 52, 104);
   left: 10px;
-  top: 60px;
+  top: 20px;
   color: #fff;
   border-radius: 10px;
   font-size: 10x;
@@ -161,7 +170,20 @@ label {
   display: flex;
 }
 
-.type > .typeInput {
+.dropped-data{
+  background: #1f383b;
+}
+
+.dropped-root {
+  background: #56777a;
+}
+
+
+
+.type > .typeInput,
+.root > .rootInput,
+.dropped-type > .typeInput,
+.dropped-root > .rootInput {
   width: 60%;
   border-radius: 10px;
   text-align: center;
@@ -169,18 +191,6 @@ label {
   color: white;
   border: none;
 }
-
-.root > .rootInput {
-  width: 60%;
-  border-radius: 10px;
-  text-align: center;
-  background-color: #75c2cc75;
-  color: white;
-  border: none;
-}
-
-
-
 
 /////////////////////////////////// Data
 .pair {

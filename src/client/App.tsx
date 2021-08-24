@@ -3,6 +3,7 @@ import Api from "./components/Api";
 import Data from "./components/Data";
 import Code from "./components/Code";
 import Board from "./components/Board";
+import Tools from "./components/Tools";
 import Bin from "./components/Bin";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -670,10 +671,13 @@ const App: React.FC = () => {
   //       })
   //       .catch((err) => console.log("get schema error"));
   //   }
+
   return (
     <div id="app">
-      <h1>GraphQL Schema Quick Builder</h1>
+      <h1>BuildQL</h1>
       <Api link={link} setLink={setLink} setData={setData} />
+      {dataKeys.length !== 0 && <Tools />}
+
       <div className="content">
         <div className="data-list">
           {dataKeys.map((dataKey) => (
@@ -684,31 +688,7 @@ const App: React.FC = () => {
             />
           ))}
         </div>
-        {
-          dataKeys.length !== 0 && <Board data={data} />
-
-          /* {/* <Api link={link} setLink={setLink} setData={setData} />
-          <div className="content">
-          <Data data={data} dragStart={dragStart} />
-          <Board
-          data={data}
-          schema={schema}
-          dragStart1={dragStart1}
-          dragOver={dragOver}
-          dragEnter={dragEnter}
-          dragLeave={dragLeave}
-          drop={drop}
-          />
-          <Code data={data} schema={schema} sendSchema={sendSchema} />
-          <Bin
-          data={data}
-          dragOver2={dragOver2}
-          dragEnter2={dragEnter2}
-          dragLeave2={dragLeave2}
-          drop2={drop2}
-          ></Bin> */
-          /* </div> */
-        }
+        {dataKeys.length !== 0 && <Board data={data} />}
         {dataKeys.length !== 0 && <Code data={data} />}
       </div>
     </div>
