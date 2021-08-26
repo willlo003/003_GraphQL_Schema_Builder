@@ -6,7 +6,6 @@ import QueryBoard from "./components/QueryBoard";
 import MutationBoard from "./components/MutationBoard";
 import Tools from "./components/Tools";
 import Bin from "./components/Bin";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const App: React.FC = () => {

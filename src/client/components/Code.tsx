@@ -6,26 +6,22 @@ import { match } from "assert/strict";
 
 type ChildProps = {
   data: any;
-  // schema: string[],
-  // sendSchema: any
 };
 
-const Code: React.FC<ChildProps> = ({
-  data,
-  // schema,
-  // sendSchema
-}) => {
+const Code: React.FC<ChildProps> = ({ data }) => {
   const {
+    typeQueries,
+    rootQueries,
+    rootMutations,
     connectedPair,
     matched,
-    rootQueryCards,
-    typeQueryCards,
-    rootMutationCards,
+    relaventContent,
+    updateCode,
   } = useBetween(useShareableState);
 
-  // useEffect(() => {
-  //   console.log("in coding", connectedPair, relaventContent);
-  // }, [connectedPair.length]);
+  useEffect(() => {
+    console.log("in coding to update code");
+  }, [matched]);
 
   let code: string = "",
     typeCodes: string = "",
@@ -41,6 +37,7 @@ const Code: React.FC<ChildProps> = ({
   let schemaCode: string = `\n\nconst schema = new GraphQLSchema({ \n\tquery: RootQueryType,\n\tmutation: RootMutationType,\n});`;
 
   useEffect(() => {
+    console.log(matched, relaventContent);
     if (connectedPair.length === 0) {
       let textArea: any = document.getElementById("textarea");
       textArea.textContent = "";
@@ -49,17 +46,25 @@ const Code: React.FC<ChildProps> = ({
       let textArea: any = document.getElementById("textarea");
 
       // get dropped and connected type, root, card for code generation
-      // console.log(rootQueryCards, typeQueryCards, dataQueryCards, matched);
 
       // update the code of root
-      rootQueryCards.forEach((e) => {
-        if (matched.hasOwnProperty(e)) {
-          rootQueryField += `\n\t\t${e}: {\n\t\t\ttype: new GraphQLList(${matched[e]}),\n\t\t\tdescription: \"List of Data\", \n\t\t\t resolve: () => data,\n\t\t},`;
+
+      rootQueries.forEach((e) => {
+        if (matched.hasOwnProperty(e["key"])) {
+          rootQueryField += `\n\t\t${
+            e["key"]
+          }: {\n\t\t\ttype: new GraphQLList(${
+            matched[e["key"]]
+          }),\n\t\t\tdescription: \"List of Data\", \n\t\t\t resolve: () => data,\n\t\t},`;
         }
       });
-      rootMutationCards.forEach((e) => {
-        if (matched.hasOwnProperty(e)) {
-          rootMutationField += `\n\t\t${e}: {\n\t\t\ttype: new GraphQLList(${matched[e]}),\n\t\t\tdescription: \"List of Data\", \n\t\t\t resolve: () => data,\n\t\t},`;
+      rootMutations.forEach((e) => {
+        if (matched.hasOwnProperty(e["key"])) {
+          rootMutationField += `\n\t\t${
+            e["key"]
+          }: {\n\t\t\ttype: new GraphQLList(${
+            matched[e["key"]]
+          }),\n\t\t\tdescription: \"List of Data\", \n\t\t\t resolve: () => data,\n\t\t},`;
         }
       });
 
@@ -67,14 +72,12 @@ const Code: React.FC<ChildProps> = ({
       rootMutationCode = `\n\nconst RootMutationType = new GraphQLObjectType({\n\tname: \"Mutation\",\n\tdescription: \"Root Mutation\",\n\tfields: () => ({${rootMutationField}\n\t}),\n});`;
 
       // type code
-      typeQueryCards.forEach((e) => {
-        console.log("typeLoop", matched[e]);
-        if (matched.hasOwnProperty(e)) {
-          let typeArr: any = matched[e];
-          typeArr.forEach((subE) => {
+      typeQueries.forEach((e) => {
+        if (matched.hasOwnProperty(e["key"])) {
+          matched[e["key"]].forEach((subE) => {
             typeQueryField += `\n\t\t${subE}: {\n\t\t\ttype: GraphQLNonNull(GraphQLString),\n\t\t},`;
           });
-          typeCodes += `\n\nconst ${e} = new GraphQLObjectType({\n\tname: "Data",\n\tdescription: "",\n\tfields: (${typeQueryField}) => ({\n\t}),\n});`;
+          typeCodes += `\n\nconst ${e["key"]} = new GraphQLObjectType({\n\tname: "Data",\n\tdescription: "",\n\tfields: (${typeQueryField}) => ({\n\t}),\n});`;
         }
       });
 
@@ -89,7 +92,7 @@ const Code: React.FC<ChildProps> = ({
 
       textArea.textContent = code;
     }
-  }, [connectedPair.length]);
+  }, [connectedPair.length, updateCode]);
 
   useEffect(() => {
     // update the schemaw code

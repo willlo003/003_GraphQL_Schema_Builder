@@ -8,9 +8,6 @@ type ChildProps = {
 };
 
 const Input: React.FC<ChildProps> = ({ setLink, link, setData }) => {
-  //   const [link, setLink] = React.useState<string>("");
-  //   const [data, setData] = React.useState<object>({});
-
   //listen input onChange
   function changing(e: any) {
     setLink(e.target.value);

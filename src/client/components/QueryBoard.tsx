@@ -24,14 +24,10 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
     setRelaventContent,
     matched,
     setMatched,
-    rootQueryCards,
-    setRootQueryCards,
-    typeQueryCards,
-    setTypeQueryCards,
-    dataQueryCards,
-    setDataQueryCards,
     datatIdCount,
     setDataIdCount,
+    updateCode,
+    setUpdateCode,
   } = useBetween(useShareableState);
 
   useEffect(() => {
@@ -71,7 +67,8 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
       setTempPair(currentTempPair);
     } else if (
       (currentTempPair[0][1] === "r" && e.target.id[1] === "d") ||
-      (currentTempPair[0][1] === "d" && e.target.id[1] === "r")
+      (currentTempPair[0][1] === "d" && e.target.id[1] === "r") ||
+      currentTempPair[0][0] === e.target.id[0]
     ) {
       alert("Wrong Connection");
     } else {
@@ -104,7 +101,6 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
       setConnectedPair(currentConnectedPair);
       setTempPair([]);
     }
-    // console.log("connectedPair", connectedPair);
   }
 
   // function when dropping data card to query
@@ -115,34 +111,25 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
     tempRelaventContent[item.id] = item.key;
     setRelaventContent(tempRelaventContent);
     setDataQueries(tempArray);
-    let tempContent = dataQueryCards;
-    tempContent.push(item.key);
-    setDataQueryCards(tempContent);
     setDataIdCount(datatIdCount + 1);
   }
 
   function droppingTypeToQuery(item: any, monitor: any) {
-    let tempArray: string[] = typeQueries;
-    tempArray.push(item.id);
+    let tempArray: object[] = typeQueries;
+    tempArray.push({ id: item.id, key: item.id });
     let tempRelaventContent: any = relaventContent;
     tempRelaventContent[item.id] = item.id;
     setRelaventContent(tempRelaventContent);
     setTypeQueries(tempArray);
-    let tempContent = typeQueryCards;
-    tempContent.push(item.id.toString());
-    setTypeQueryCards(tempContent);
   }
 
   function droppingRootToQuery(item: any, monitor: any) {
-    let tempArray: string[] = rootQueries;
-    tempArray.push(item.id);
+    let tempArray: object[] = rootQueries;
+    tempArray.push({ id: item.id, key: item.id });
     let tempRelaventContent: any = relaventContent;
     tempRelaventContent[item.id] = item.id;
     setRelaventContent(tempRelaventContent);
     setRootQueries(tempArray);
-    let tempContent = rootQueryCards;
-    tempContent.push(item.id.toString());
-    setRootQueryCards(tempContent);
   }
 
   // useDrop when dropping the cards
@@ -170,16 +157,87 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
     }),
   });
 
+  function rootChange(e) {
+    let cardId = e.target.parentElement.id;
+    let rootCurrentText = relaventContent[cardId];
+
+    //update rootQueries
+    let tempRootQueries = rootQueries;
+    tempRootQueries.forEach((tempRootQuery) => {
+      if (tempRootQuery["id"] === cardId) {
+        tempRootQuery["key"] = e.target.value;
+      }
+    });
+    setRootQueries(tempRootQueries);
+
+    //update relaventContent
+    let tempRelaventContent = relaventContent;
+    tempRelaventContent[cardId] = e.target.value;
+    setRelaventContent(tempRelaventContent);
+
+    //update matched
+    let tempMatched = matched;
+    tempMatched[e.target.value] = tempMatched[rootCurrentText];
+    delete tempMatched[rootCurrentText];
+    setMatched(tempMatched);
+
+    //update the code
+    setUpdateCode(!updateCode);
+  }
+
+  function typeChange(e) {
+    console.log(matched);
+    let cardId = e.target.parentElement.id;
+    let typeCurrentText = relaventContent[cardId];
+
+    //update typeQueries
+    let tempTypeQueries = typeQueries;
+    tempTypeQueries.forEach((tempTypeQuery) => {
+      if (tempTypeQuery["id"] === cardId) {
+        tempTypeQuery["key"] = e.target.value;
+      }
+    });
+    setTypeQueries(tempTypeQueries);
+
+    // update relaventContent
+    let tempRelaventContent = relaventContent;
+    tempRelaventContent[cardId] = e.target.value;
+    setRelaventContent(tempRelaventContent);
+
+    //update matched
+    let tempMatched = matched;
+    for (let pair in tempMatched) {
+      tempMatched[pair].forEach((el) => {
+        if (el === typeCurrentText) {
+          let ind = tempMatched[pair].indexOf(typeCurrentText);
+          tempMatched[pair][ind] = e.target.value;
+        }
+      });
+    }
+
+    tempMatched = matched;
+    tempMatched[e.target.value] = tempMatched[typeCurrentText];
+    delete tempMatched[typeCurrentText];
+    setMatched(tempMatched);
+
+    //update the code
+    setUpdateCode(!updateCode);
+  }
+
   return (
     <div className="query-board" id="query-board">
       <div className="query-root" id="query-root" ref={dropToRootQueryBoard}>
         {rootQueries.map((rootQuery: any) => (
-          <div className="dropped-root" id={rootQuery}>
-            <input className="rootInput" defaultValue={rootQuery}></input>
+          <div className="dropped-root" id={rootQuery.id}>
+            <input
+              className="rootInput"
+              defaultValue={rootQuery.key}
+              onChange={rootChange}
+            ></input>
             <button
               className="right"
               onClick={lineUp}
-              id={`r${rootQuery}`}
+              id={`r${rootQuery.id}`}
             ></button>
           </div>
         ))}
@@ -191,16 +249,20 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
         ref={dropToTypeQueryBoard}
       >
         {typeQueries.map((typeQuery: any) => (
-          <div className="dropped-type" id={typeQuery}>
+          <div className="dropped-type" id={typeQuery.id}>
             <button
               className="left"
-              id={`l${typeQuery}`}
+              id={`l${typeQuery.id}`}
               onClick={lineUp}
             ></button>
-            <input className="typeInput" defaultValue={typeQuery}></input>
+            <input
+              className="typeInput"
+              defaultValue={typeQuery.key}
+              onChange={typeChange}
+            ></input>
             <button
               className="right"
-              id={`r${typeQuery}`}
+              id={`r${typeQuery.id}`}
               onClick={lineUp}
             ></button>
           </div>
@@ -224,10 +286,6 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
         ))}
       </div>
     </div>
-
-    // <div className="mutation-board" id="mutation-board">
-    //   Mutation
-    // </div>
   );
 };
 

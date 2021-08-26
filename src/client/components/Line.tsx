@@ -8,6 +8,7 @@ function Line(x1: number, y1: number, x2: number, y2: number, id: string) {
     y2 = y1;
     y1 = tmp;
   }
+
   const lineLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   const m = (y2 - y1) / (x2 - x1);
   const degree = (Math.atan(m) * 180) / Math.PI;

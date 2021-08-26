@@ -9,26 +9,14 @@ type ChildProps = {};
 const Tools: React.FC<ChildProps> = ({}) => {
   const {
     setDataQueries,
-    rootQueries,
     setRootQueries,
     setTypeQueries,
-    setDataMutations,
-    rootMutations,
     setRootMutations,
     setTypeMutations,
     setTempPair,
     setConnectedPair,
-    relaventContent,
     setRelaventContent,
-    matched,
     setMatched,
-    rootQueryCards,
-    setRootQueryCards,
-    setTypeQueryCards,
-    setDataQueryCards,
-    rootMutationCards,
-    setRootMutationCards,
-    setTypeMutationCards,
     setDataIdCount,
   } = useBetween(useShareableState);
 
@@ -60,18 +48,12 @@ const Tools: React.FC<ChildProps> = ({}) => {
     setDataQueries([]);
     setRootQueries([]);
     setTypeQueries([]);
-    setDataMutations([]);
     setRootMutations([]);
     setTypeMutations([]);
     setTempPair([]);
     setConnectedPair([]);
     setRelaventContent({});
     setMatched({});
-    setRootQueryCards([]);
-    setTypeQueryCards([]);
-    setDataQueryCards([]);
-    setRootMutationCards([]);
-    setTypeMutationCards([]);
     setDataIdCount(0);
     let lines: NodeListOf<Element> = document.querySelectorAll(".line");
     for (var element of lines) {

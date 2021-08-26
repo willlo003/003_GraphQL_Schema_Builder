@@ -10,6 +10,7 @@ type ChildProps = {
 
 const MutationBoard: React.FC<ChildProps> = ({ data }) => {
   const {
+    rootQueries,
     rootMutations,
     setRootMutations,
     typeMutations,
@@ -22,10 +23,8 @@ const MutationBoard: React.FC<ChildProps> = ({ data }) => {
     setRelaventContent,
     matched,
     setMatched,
-    rootMutationCards,
-    setRootMutationCards,
-    typeMutationCards,
-    setTypeMutationCards,
+    updateCode,
+    setUpdateCode,
   } = useBetween(useShareableState);
 
   //   //when the card connect
@@ -55,10 +54,7 @@ const MutationBoard: React.FC<ChildProps> = ({ data }) => {
       let tempMatched: any = matched;
       let currentRelaventContent: any = relaventContent;
       let firstCardContent, secondCardContent;
-      if (
-        (currentTempPair[0][1] === "r" && currentTempPair[1][1] === "t") ||
-        (currentTempPair[0][1] === "t" && currentTempPair[1][1] === "d")
-      ) {
+      if (currentTempPair[0][1] === "r" && currentTempPair[1][1] === "t") {
         firstCardContent = currentRelaventContent[currentTempPair[0].slice(1)];
         secondCardContent = currentRelaventContent[currentTempPair[1].slice(1)];
       } else {
@@ -70,37 +66,30 @@ const MutationBoard: React.FC<ChildProps> = ({ data }) => {
       } else {
         tempMatched[firstCardContent] = [secondCardContent];
       }
+
       setMatched(tempMatched);
       setConnectedPair(currentConnectedPair);
       setTempPair([]);
     }
-    // console.log("connectedPair", connectedPair);
   }
 
   // function when dropping data card to query
-
   function droppingTypeToMutation(item: any, monitor: any) {
-    let tempArray: string[] = typeMutations;
-    tempArray.push(item.id);
+    let tempArray: object[] = typeMutations;
+    tempArray.push({ id: item.id, key: item.id });
     let tempRelaventContent: any = relaventContent;
     tempRelaventContent[item.id] = item.id;
     setRelaventContent(tempRelaventContent);
     setTypeMutations(tempArray);
-    let tempContent = typeMutationCards;
-    tempContent.push(item.id.toString());
-    setTypeMutationCards(tempContent);
   }
 
   function droppingRootToMutation(item: any, monitor: any) {
-    let tempArray: string[] = rootMutations;
-    tempArray.push(item.id);
+    let tempArray: object[] = rootMutations;
+    tempArray.push({ id: item.id, key: item.id });
     let tempRelaventContent: any = relaventContent;
     tempRelaventContent[item.id] = item.id;
     setRelaventContent(tempRelaventContent);
     setRootMutations(tempArray);
-    let tempContent = rootMutationCards;
-    tempContent.push(item.id.toString());
-    setRootMutationCards(tempContent);
   }
 
   // useDrop when dropping the cards
@@ -122,41 +111,80 @@ const MutationBoard: React.FC<ChildProps> = ({ data }) => {
 
   function rootChange(e) {
     let cardId = e.target.parentElement.id;
-    let rootMutationCardsId = rootMutationCards.indexOf(e.target.defaultValue);
-    if (rootMutationCardsId === -1) {
-      rootMutationCardsId = rootMutationCards.indexOf(e.target.value);
+    let rootCurrentText = relaventContent[cardId];
+
+    //update rootMutations
+    let tempRootMutations = rootMutations;
+    tempRootMutations.forEach((tempRootMutation) => {
+      if (tempRootMutation["id"] === cardId) {
+        tempRootMutation["key"] = e.target.value;
+      }
+    });
+    setRootMutations(tempRootMutations);
+
+    //update relaventContent
+    let tempRelaventContent = relaventContent;
+    tempRelaventContent[cardId] = e.target.value;
+    setRelaventContent(tempRelaventContent);
+
+    //update matched
+    let tempMatched = matched;
+    tempMatched[e.target.value] = tempMatched[rootCurrentText];
+    delete tempMatched[rootCurrentText];
+    setMatched(tempMatched);
+
+    //update the code
+    setUpdateCode(!updateCode);
+  }
+
+  function typeChange(e) {
+    let cardId = e.target.parentElement.id;
+    let typeCurrentText = relaventContent[cardId];
+
+    //update typeMutations
+    let tempTypeMutations = typeMutations;
+    tempTypeMutations.forEach((tempTypeMutation) => {
+      if (tempTypeMutation["id"] === cardId) {
+        tempTypeMutation["key"] = e.target.value;
+      }
+    });
+    setTypeMutations(tempTypeMutations);
+
+    // update relaventContent
+    let tempRelaventContent = relaventContent;
+    tempRelaventContent[cardId] = e.target.value;
+    setRelaventContent(tempRelaventContent);
+
+    //update matched
+    let tempMatched = matched;
+    for (let pair in tempMatched) {
+      tempMatched[pair].forEach((el) => {
+        if (el === typeCurrentText) {
+          let ind = tempMatched[pair].indexOf(typeCurrentText);
+          tempMatched[pair][ind] = e.target.value;
+        }
+      });
     }
-    console.log(e.target.value, e.target.defaultValue);
-    console.log(
-      // "rootQueries",
-      // rootQueries,
-      "rootMutations",
-      rootMutations,
-      "relaventContent",
-      relaventContent,
-      "matched",
-      matched,
-      // "rootQueryCards",
-      // rootQueryCards,
-      "rootMutationCards",
-      rootMutationCards
-    );
+    setMatched(tempMatched);
+
+    //update the code
+    setUpdateCode(!updateCode);
   }
 
   return (
     <div className="mutation-board" id="mutation-board">
       <div className="query-root" id="query-root" ref={dropToRootMutationBoard}>
         {rootMutations.map((rootMutation: any) => (
-          <div className="dropped-root" id={rootMutation}>
+          <div className="dropped-root" id={rootMutation.id}>
             <input
               className="rootInput"
-              defaultValue={rootMutation}
+              defaultValue={rootMutation.key}
               onChange={rootChange}
             ></input>
             <button
               className="right"
               onClick={lineUp}
-              id={`r${rootMutation}`}
+              id={`r${rootMutation.id}`}
             ></button>
           </div>
         ))}
@@ -168,16 +196,20 @@ const MutationBoard: React.FC<ChildProps> = ({ data }) => {
         ref={dropToTypeMutationBoard}
       >
         {typeMutations.map((typeMutation: any) => (
-          <div className="dropped-type" id={typeMutation}>
+          <div className="dropped-type" id={typeMutation.id}>
             <button
               className="left"
-              id={`l${typeMutation}`}
+              id={`l${typeMutation.id}`}
               onClick={lineUp}
             ></button>
-            <input className="typeInput" defaultValue={typeMutation}></input>
+            <input
+              className="typeInput"
+              defaultValue={typeMutation.key}
+              onChange={typeChange}
+            ></input>
             <button
               className="right"
-              id={`r${typeMutation}`}
+              id={`r${typeMutation.id}`}
               onClick={lineUp}
             ></button>
           </div>

@@ -3,28 +3,18 @@ import React, { useEffect } from "react";
 
 const useShareableState = () => {
   const [dataQueries, setDataQueries] = React.useState<Array<object>>([]);
-  const [rootQueries, setRootQueries] = React.useState<Array<string>>([]);
-  const [typeQueries, setTypeQueries] = React.useState<Array<string>>([]);
-  const [dataMutations, setDataMutations] = React.useState<Array<object>>([]);
-  const [rootMutations, setRootMutations] = React.useState<Array<string>>([]);
-  const [typeMutations, setTypeMutations] = React.useState<Array<string>>([]);
+  const [rootQueries, setRootQueries] = React.useState<Array<object>>([]);
+  const [typeQueries, setTypeQueries] = React.useState<Array<object>>([]);
+  const [rootMutations, setRootMutations] = React.useState<Array<object>>([]);
+  const [typeMutations, setTypeMutations] = React.useState<Array<object>>([]);
   const [tempPair, setTempPair] = React.useState<Array<string>>([]);
   const [connectedPair, setConnectedPair] = React.useState<
     Array<Array<string>>
   >([]);
   const [relaventContent, setRelaventContent] = React.useState<object>({});
   const [matched, setMatched] = React.useState<any>({});
-  const [rootQueryCards, setRootQueryCards] = React.useState<Array<string>>([]);
-  const [typeQueryCards, setTypeQueryCards] = React.useState<Array<string>>([]);
-  const [dataQueryCards, setDataQueryCards] = React.useState<Array<string>>([]);
-  const [rootMutationCards, setRootMutationCards] = React.useState<
-    Array<string>
-  >([]);
-  const [typeMutationCards, setTypeMutationCards] = React.useState<
-    Array<string>
-  >([]);
-
   const [datatIdCount, setDataIdCount] = React.useState<number>(0);
+  const [updateCode, setUpdateCode] = React.useState<boolean>(true);
 
   return {
     dataQueries,
@@ -33,8 +23,6 @@ const useShareableState = () => {
     setRootQueries,
     typeQueries,
     setTypeQueries,
-    dataMutations,
-    setDataMutations,
     rootMutations,
     setRootMutations,
     typeMutations,
@@ -47,18 +35,10 @@ const useShareableState = () => {
     setRelaventContent,
     matched,
     setMatched,
-    rootQueryCards,
-    setRootQueryCards,
-    typeQueryCards,
-    setTypeQueryCards,
-    dataQueryCards,
-    setDataQueryCards,
-    rootMutationCards,
-    setRootMutationCards,
-    typeMutationCards,
-    setTypeMutationCards,
     datatIdCount,
     setDataIdCount,
+    updateCode,
+    setUpdateCode,
   };
 };
 
