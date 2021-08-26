@@ -2,21 +2,17 @@ import React from "react";
 import Api from "./components/Api";
 import Data from "./components/Data";
 import Code from "./components/Code";
-import Board from "./components/Board";
+import QueryBoard from "./components/QueryBoard";
+import MutationBoard from "./components/MutationBoard";
 import Tools from "./components/Tools";
 import Bin from "./components/Bin";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const createHistory = require("history").createBrowserHistory;
-
 const App: React.FC = () => {
   const [link, setLink] = React.useState<string>("");
   const [data, setData] = React.useState<object>({});
   const [dataKeys, setDataKeys] = React.useState<string[]>([]);
-  // const [query, setQuery] = React.useState([]);
-  // const [schema, setSchema] = React.useState([]);
-  // const [dragItem, setDragItem] = React.useState();
 
   useEffect(() => {
     setDataKeys(Object.keys(data));
@@ -688,7 +684,12 @@ const App: React.FC = () => {
             />
           ))}
         </div>
-        {dataKeys.length !== 0 && <Board data={data} />}
+        {dataKeys.length !== 0 && (
+          <div className="board">
+            <QueryBoard data={data} />
+            <MutationBoard data={data} />
+          </div>
+        )}
         {dataKeys.length !== 0 && <Code data={data} />}
       </div>
     </div>

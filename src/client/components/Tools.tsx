@@ -1,10 +1,37 @@
 import React, { useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../dnd/items";
+import { useBetween } from "use-between";
+import useShareableState from "../states/states";
 
 type ChildProps = {};
 
 const Tools: React.FC<ChildProps> = ({}) => {
+  const {
+    setDataQueries,
+    rootQueries,
+    setRootQueries,
+    setTypeQueries,
+    setDataMutations,
+    rootMutations,
+    setRootMutations,
+    setTypeMutations,
+    setTempPair,
+    setConnectedPair,
+    relaventContent,
+    setRelaventContent,
+    matched,
+    setMatched,
+    rootQueryCards,
+    setRootQueryCards,
+    setTypeQueryCards,
+    setDataQueryCards,
+    rootMutationCards,
+    setRootMutationCards,
+    setTypeMutationCards,
+    setDataIdCount,
+  } = useBetween(useShareableState);
+
   const [rootId, setRootId] = React.useState<number>(0);
   const [typeId, setTypeId] = React.useState<number>(0);
 
@@ -29,6 +56,29 @@ const Tools: React.FC<ChildProps> = ({}) => {
     },
   });
 
+  function clearAll() {
+    setDataQueries([]);
+    setRootQueries([]);
+    setTypeQueries([]);
+    setDataMutations([]);
+    setRootMutations([]);
+    setTypeMutations([]);
+    setTempPair([]);
+    setConnectedPair([]);
+    setRelaventContent({});
+    setMatched({});
+    setRootQueryCards([]);
+    setTypeQueryCards([]);
+    setDataQueryCards([]);
+    setRootMutationCards([]);
+    setTypeMutationCards([]);
+    setDataIdCount(0);
+    let lines: NodeListOf<Element> = document.querySelectorAll(".line");
+    for (var element of lines) {
+      element.remove();
+    }
+  }
+
   return (
     <div className="tool-board" id="tool-board">
       <div className="type" ref={dragType}>
@@ -37,6 +87,7 @@ const Tools: React.FC<ChildProps> = ({}) => {
       <div className="root" ref={dragRoot}>
         <input className="rootInput" value="Root"></input>
       </div>
+      <button onClick={clearAll}>Clear All</button>
     </div>
   );
 };

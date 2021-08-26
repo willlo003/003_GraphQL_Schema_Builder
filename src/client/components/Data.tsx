@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../dnd/items";
+import { useBetween } from "use-between";
+import useShareableState from "../states/states";
 
 type ChildProps = {
   // onClick?:(val: string) => void,
@@ -16,6 +18,8 @@ const Data: React.FC<ChildProps> = ({
   id,
   // dragStart,
 }) => {
+  const { datatIdCount } = useBetween(useShareableState);
+
   const [content, setContent] = React.useState<string>("");
 
   // create the data cards
@@ -47,7 +51,7 @@ const Data: React.FC<ChildProps> = ({
 
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.DATA,
-    item: () => ({ id: `data${id}`, key: `${dataKey}` }),
+    item: () => ({ id: `data${id}${datatIdCount}`, key: `${dataKey}` }),
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
