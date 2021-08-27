@@ -173,7 +173,11 @@ const MutationBoard: React.FC<ChildProps> = ({ data }) => {
 
   return (
     <div className="mutation-board" id="mutation-board">
-      <div className="query-root" id="query-root" ref={dropToRootMutationBoard}>
+      <div
+        className="mutation-root"
+        id="mutation-root"
+        ref={dropToRootMutationBoard}
+      >
         {rootMutations.map((rootMutation: any) => (
           <div className="dropped-root" id={rootMutation.id}>
             <input
@@ -190,8 +194,8 @@ const MutationBoard: React.FC<ChildProps> = ({ data }) => {
         ))}
       </div>
       <div
-        className="query-type"
-        id="query-type"
+        className="mutation-type"
+        id="mutation-type"
         // style={{ background }}
         ref={dropToTypeMutationBoard}
       >

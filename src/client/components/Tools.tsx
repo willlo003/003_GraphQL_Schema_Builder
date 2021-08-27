@@ -44,7 +44,7 @@ const Tools: React.FC<ChildProps> = ({}) => {
     },
   });
 
-  function clearAll() {
+  function cleanAll() {
     setDataQueries([]);
     setRootQueries([]);
     setTypeQueries([]);
@@ -69,7 +69,9 @@ const Tools: React.FC<ChildProps> = ({}) => {
       <div className="root" ref={dragRoot}>
         <input className="rootInput" value="Root"></input>
       </div>
-      <button onClick={clearAll}>Clear All</button>
+      <button className="clean" onClick={cleanAll}>
+        Clean All
+      </button>
     </div>
   );
 };

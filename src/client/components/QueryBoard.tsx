@@ -97,6 +97,16 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
       } else {
         tempMatched[firstCardContent] = [secondCardContent];
       }
+      //add border style
+      // let firstCard: any = document.getElementById(currentTempPair[1].slice(1));
+      // firstCard.style.outline = "3px solid orange";
+      // firstCard.style.background = "orange";
+      // let secondCard: any = document.getElementById(
+      //   currentTempPair[0].slice(1)
+      // );
+      // secondCard.style.outline = "3px solid orange";
+      // secondCard.style.background = "orange";
+
       setMatched(tempMatched);
       setConnectedPair(currentConnectedPair);
       setTempPair([]);

@@ -42,7 +42,7 @@ const Data: React.FC<ChildProps> = ({
     let child = e.target.children[0];
     if (child.style.visibility === "visible") {
       child.style.visibility = "hidden";
-      key.style.backgroundColor = "#1f383b";
+      key.style.backgroundColor = "#81818180";
     } else {
       child.style.visibility = "visible";
       key.style.backgroundColor = "orange";
