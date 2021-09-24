@@ -7,6 +7,8 @@ type ChildProps = {
 };
 
 const Code: React.FC<ChildProps> = ({ data }) => {
+  console.log("Code rendering");
+
   const {
     typeQueries,
     rootQueries,
@@ -35,7 +37,6 @@ const Code: React.FC<ChildProps> = ({ data }) => {
   let schemaCode: string = `\n\nconst schema = new GraphQLSchema({ \n\tquery: RootQueryType,\n\tmutation: RootMutationType,\n});`;
 
   useEffect(() => {
-    console.log(matched, relaventContent);
     if (connectedPair.length === 0) {
       let textArea: any = document.getElementById("textarea");
       textArea.textContent = "";

@@ -7,6 +7,8 @@ import useShareableState from "../states/states";
 type ChildProps = {};
 
 const Tools: React.FC<ChildProps> = ({}) => {
+  console.log("Tools rendering");
+
   const {
     setDataQueries,
     setRootQueries,
@@ -23,12 +25,9 @@ const Tools: React.FC<ChildProps> = ({}) => {
   const [rootId, setRootId] = React.useState<number>(0);
   const [typeId, setTypeId] = React.useState<number>(0);
 
-  const [{}, dragType] = useDrag({
+  const [, dragType] = useDrag({
     type: ItemTypes.TYPE,
     item: () => ({ id: `type${typeId}` }),
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
     end: (item, monitor) => {
       let tempId = typeId;
       setTypeId(tempId + 1);

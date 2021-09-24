@@ -1,15 +1,17 @@
 import React from "react";
 
 type ChildProps = {
-  setLink: any;
   link: string;
   setData: any;
+  hanldeClick: any;
 };
 
-const Input: React.FC<ChildProps> = ({ setLink, link, setData }) => {
+const Input: React.FC<ChildProps> = ({ link, setData, hanldeClick }) => {
+  console.log("Api rendering");
+
   //listen input onChange
   function changing(e: any) {
-    setLink(e.target.value);
+    link = e.target.value;
   }
 
   //fetch data
@@ -25,7 +27,8 @@ const Input: React.FC<ChildProps> = ({ setLink, link, setData }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setData(data);
+        hanldeClick(data);
+        // setData(data);
       })
       .catch((err) => console.log("error"));
   }

@@ -3,14 +3,14 @@ import { useDrop } from "react-dnd";
 import { ItemTypes } from "../dnd/items";
 import { useBetween } from "use-between";
 import useShareableState from "../states/states";
-import Line from "./Line";
 type ChildProps = {
   data: object;
 };
 
 const MutationBoard: React.FC<ChildProps> = ({ data }) => {
+  console.log("MutationBoard rendering");
+
   const {
-    rootQueries,
     rootMutations,
     setRootMutations,
     typeMutations,

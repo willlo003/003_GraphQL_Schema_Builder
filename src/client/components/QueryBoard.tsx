@@ -6,9 +6,19 @@ import useShareableState from "../states/states";
 import Line from "./Line";
 type ChildProps = {
   data: object;
+  // updateDataId: any;
+  // datatIdCount: number;
 };
 
-const QueryBoard: React.FC<ChildProps> = ({ data }) => {
+const QueryBoard: React.FC<ChildProps> = ({
+  data,
+  // datatIdCount,
+  // updateDataId,
+}) => {
+  console.log("QueryBoard rendering");
+
+  const [datatIdCount, setDataIdCount] = React.useState<number>(0);
+
   const {
     dataQueries,
     setDataQueries,
@@ -24,8 +34,8 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
     setRelaventContent,
     matched,
     setMatched,
-    datatIdCount,
-    setDataIdCount,
+    // datatIdCount,
+    // setDataIdCount,
     updateCode,
     setUpdateCode,
   } = useBetween(useShareableState);
@@ -116,7 +126,7 @@ const QueryBoard: React.FC<ChildProps> = ({ data }) => {
   // function when dropping data card to query
   function droppingDataToQuery(item: any, monitor: any) {
     let tempArray: object[] = dataQueries;
-    tempArray.push({ id: item.id, key: item.key });
+    tempArray.push({ id: `${item.id}${datatIdCount}`, key: item.key });
     let tempRelaventContent: any = relaventContent;
     tempRelaventContent[item.id] = item.key;
     setRelaventContent(tempRelaventContent);

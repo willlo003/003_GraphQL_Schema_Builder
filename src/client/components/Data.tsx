@@ -7,33 +7,29 @@ import useShareableState from "../states/states";
 type ChildProps = {
   // onClick?:(val: string) => void,
   data: any;
-  // dragStart: any,
+  datatIdCount: number;
   dataKey: any;
   id: number;
 };
 
-const Data: React.FC<ChildProps> = ({
-  data,
-  dataKey,
-  id,
-  // dragStart,
-}) => {
-  const { datatIdCount } = useBetween(useShareableState);
+const Data: React.FC<ChildProps> = ({ data, dataKey, id, datatIdCount }) => {
+  console.log("Data rendering", datatIdCount);
+  // const { datatIdCount } = useBetween(useShareableState);
 
   const [content, setContent] = React.useState<string>("");
 
   // create the data cards
   useEffect(() => {
-    let contentStrin: string = "";
+    let contentString: string = "";
     if (typeof data[dataKey] === "object") {
       for (const subKey in data[dataKey]) {
-        contentStrin += `${subKey}: ${data[dataKey][subKey]}\r\n`;
+        contentString += `${subKey}: ${data[dataKey][subKey]}\r\n`;
       }
     } else {
-      contentStrin += data[dataKey].toString().replaceAll(",", "\r\n");
+      contentString += data[dataKey].toString().replaceAll(",", "\r\n");
     }
 
-    setContent(contentStrin);
+    setContent(contentString);
   }, [data]);
 
   //onClick function
@@ -49,18 +45,19 @@ const Data: React.FC<ChildProps> = ({
     }
   }
 
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     type: ItemTypes.DATA,
-    item: () => ({ id: `data${id}${datatIdCount}`, key: `${dataKey}` }),
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+    item: () => ({ id: `data${id}`, key: `${dataKey}` }),
   });
-  const opacity = isDragging ? 0 : 1;
 
   return (
     <div className="pair">
-      <button className="key" onClick={onClick} id={`data${id}`} ref={drag}>
+      <button
+        className="key"
+        onClick={onClick}
+        id={`data${id}${datatIdCount}`}
+        ref={drag}
+      >
         {dataKey}
         <p className="value">{content}</p>
       </button>
