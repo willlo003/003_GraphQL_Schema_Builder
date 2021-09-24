@@ -9,6 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, "public"),
   },
   devServer: {
+    host: "0.0.0.0",
     compress: true,
     port: 8080,
     publicPath: "/public/",
