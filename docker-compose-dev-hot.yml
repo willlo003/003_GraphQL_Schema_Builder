@@ -1,14 +1,14 @@
 version: "3"
 services:
   dev:
-    image: willlo003/buildql
+    image: willlo003/buildql:prod
     container_name: buildql-dev
     ports:
-      - "8080:8080"
+      - "3000:3000"
     volumes:
       - ./:/usr/src/app/
       - /usr/src/app/node_modules
-    command: npm run dev
+    command: npm run start
 
 
 volumes:

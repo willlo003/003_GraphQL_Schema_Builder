@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "serve": "webpack serve",
-    "start": "NODE_ENV=production node src/server/server.ts",
+    "start": "NODE_ENV=production nodemon --exec ts-node -T src/server/server.ts",
     "build": "NODE_ENV=production webpack",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack serve --open \" \"NODE_ENV=production nodemon --exec ts-node -T src/server/server.ts\""
   },
